@@ -7,6 +7,7 @@ type RouterGroup struct {
 	ContactMethodRouter
 	NavGameCategoryRouter
 	NavGameRouter
+	NavGameConfigRouter
 }
 
 var (
@@ -14,4 +15,5 @@ var (
 	navContactMethodApi = api.ApiGroupApp.NavigationApiGroup.ContactMethodApi
 	navGameCategoryApi  = api.ApiGroupApp.NavigationApiGroup.NavGameCategoryApi
 	navGameApi          = api.ApiGroupApp.NavigationApiGroup.NavGameApi
+	navGameConfigApi    = api.ApiGroupApp.NavigationApiGroup.NavGameConfigApi
 )

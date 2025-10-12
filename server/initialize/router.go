@@ -101,6 +101,7 @@ func Routers() *gin.Engine {
 		navigationRouter.InitContactMethodRouter(PrivateGroup)              // 导航-联系方式
 		navigationRouter.InitGameCategoryRouter(PrivateGroup)               // 导航-游戏类别
 		navigationRouter.InitGameRouter(PrivateGroup)                       // 导航-游戏管理
+		navigationRouter.InitGameConfigRouter(PrivateGroup)                 // 导航-游戏配置
 		exampleRouter.InitCustomerRouter(PrivateGroup)                      // 客户路由
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)         // 文件上传下载功能路由
 		exampleRouter.InitAttachmentCategoryRouterRouter(PrivateGroup)      // 文件上传下载分类
