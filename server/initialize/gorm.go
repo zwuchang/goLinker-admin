@@ -5,6 +5,7 @@ import (
 
 	"goLinker-admin/server/global"
 	"goLinker-admin/server/model/example"
+	"goLinker-admin/server/model/navigation"
 	"goLinker-admin/server/model/system"
 
 	"go.uber.org/zap"
@@ -50,6 +51,9 @@ func RegisterTables() {
 		system.SysParams{},
 		system.SysVersion{},
 		system.SysCron{},
+
+		navigation.NavContactConfig{},
+		navigation.NavContactMethod{},
 
 		example.ExaFile{},
 		example.ExaCustomer{},

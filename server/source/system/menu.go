@@ -59,6 +59,7 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		{MenuLevel: 0, Hidden: true, ParentId: 0, Path: "person", Name: "person", Component: "view/person/person.vue", Sort: 4, Meta: Meta{Title: "个人信息", Icon: "message"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "example", Name: "example", Component: "view/example/index.vue", Sort: 7, Meta: Meta{Title: "示例文件", Icon: "management"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "systemTools", Name: "systemTools", Component: "view/systemTools/index.vue", Sort: 5, Meta: Meta{Title: "系统工具", Icon: "tools"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "navigation", Name: "navigation", Component: "view/navigation/index.vue", Sort: 6, Meta: Meta{Title: "导航管理", Icon: "guide"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "state", Name: "state", Component: "view/system/state.vue", Sort: 8, Meta: Meta{Title: "服务器状态", Icon: "cloudy"}},
 	}
 
@@ -91,6 +92,10 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 
 		// systemTools子菜单
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemTools"], Path: "system", Name: "system", Component: "view/systemTools/system/system.vue", Sort: 4, Meta: Meta{Title: "系统配置", Icon: "operation"}},
+
+		// navigation子菜单
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["navigation"], Path: "contactConfig", Name: "contactConfig", Component: "view/navigation/contactConfig/contactConfig.vue", Sort: 1, Meta: Meta{Title: "联系配置", Icon: "setting"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["navigation"], Path: "contactMethod", Name: "contactMethod", Component: "view/navigation/contactMethod/contactMethod.vue", Sort: 2, Meta: Meta{Title: "联系方式", Icon: "service"}},
 	}
 
 	// 创建子菜单
@@ -109,8 +114,13 @@ func (i *initMenu) DataInserted(ctx context.Context) bool {
 	if !ok {
 		return false
 	}
-	if errors.Is(db.Where("path = ?", "autoPkg").First(&SysBaseMenu{}).Error, gorm.ErrRecordNotFound) { // 判断是否存在数据
-		return false
+
+	// 检查关键菜单是否存在，如果任何一个不存在，都需要重新初始化
+	keyMenus := []string{"autoPkg", "navigation", "contactConfig", "contactMethod"}
+	for _, menuPath := range keyMenus {
+		if errors.Is(db.Where("path = ?", menuPath).First(&SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
+			return false
+		}
 	}
 	return true
 }

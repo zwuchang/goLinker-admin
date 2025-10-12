@@ -3,6 +3,7 @@ package initialize
 import (
 	"context"
 	"goLinker-admin/server/model/example"
+	navModel "goLinker-admin/server/model/navigation"
 	sysModel "goLinker-admin/server/model/system"
 	"goLinker-admin/server/service/system"
 
@@ -54,6 +55,9 @@ func (e *ensureTables) MigrateTable(ctx context.Context) (context.Context, error
 		sysModel.SysParams{},
 		sysModel.SysVersion{},
 		adapter.CasbinRule{},
+
+		navModel.NavContactConfig{},
+		navModel.NavContactMethod{},
 
 		example.ExaFile{},
 		example.ExaCustomer{},
