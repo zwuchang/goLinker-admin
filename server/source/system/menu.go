@@ -96,6 +96,8 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		// navigation子菜单
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["navigation"], Path: "contactConfig", Name: "contactConfig", Component: "view/navigation/contactConfig/contactConfig.vue", Sort: 1, Meta: Meta{Title: "联系配置", Icon: "setting"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["navigation"], Path: "contactMethod", Name: "contactMethod", Component: "view/navigation/contactMethod/contactMethod.vue", Sort: 2, Meta: Meta{Title: "联系方式", Icon: "service"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["navigation"], Path: "gameCategory", Name: "gameCategory", Component: "view/navigation/gameCategory/gameCategory.vue", Sort: 3, Meta: Meta{Title: "游戏类别", Icon: "collection"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["navigation"], Path: "game", Name: "game", Component: "view/navigation/game/game.vue", Sort: 4, Meta: Meta{Title: "游戏管理", Icon: "trophy"}},
 	}
 
 	// 创建子菜单
@@ -116,7 +118,7 @@ func (i *initMenu) DataInserted(ctx context.Context) bool {
 	}
 
 	// 检查关键菜单是否存在，如果任何一个不存在，都需要重新初始化
-	keyMenus := []string{"autoPkg", "navigation", "contactConfig", "contactMethod"}
+	keyMenus := []string{"autoPkg", "navigation", "contactConfig", "contactMethod", "gameCategory", "game"}
 	for _, menuPath := range keyMenus {
 		if errors.Is(db.Where("path = ?", menuPath).First(&SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
 			return false

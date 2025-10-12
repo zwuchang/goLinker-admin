@@ -99,6 +99,8 @@ func Routers() *gin.Engine {
 		systemRouter.InitSysParamsRouter(PrivateGroup, PublicGroup)         // 参数管理
 		navigationRouter.InitContactConfigRouter(PrivateGroup)              // 导航-联系配置
 		navigationRouter.InitContactMethodRouter(PrivateGroup)              // 导航-联系方式
+		navigationRouter.InitGameCategoryRouter(PrivateGroup)               // 导航-游戏类别
+		navigationRouter.InitGameRouter(PrivateGroup)                       // 导航-游戏管理
 		exampleRouter.InitCustomerRouter(PrivateGroup)                      // 客户路由
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)         // 文件上传下载功能路由
 		exampleRouter.InitAttachmentCategoryRouterRouter(PrivateGroup)      // 文件上传下载分类

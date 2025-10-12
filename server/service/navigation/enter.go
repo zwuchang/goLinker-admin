@@ -5,6 +5,8 @@ type ServiceGroup struct {
 	ContactMethodService
 	NavMenuCheckService
 	NavApiCheckService
+	NavGameCategoryService
+	NavGameService
 }
 
 var ServiceGroupApp = new(ServiceGroup)

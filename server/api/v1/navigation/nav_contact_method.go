@@ -165,5 +165,3 @@ func (s *ContactMethodApi) GetNavContactMethodList(c *gin.Context) {
 		PageSize: pageInfo.PageSize,
 	}, "获取成功", c)
 }
-
-

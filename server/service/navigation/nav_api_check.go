@@ -49,12 +49,79 @@ func (s *NavApiCheckService) CheckAndCreateNavigationApis() error {
 			ApiGroup:    "导航管理",
 			Method:      "DELETE",
 		},
-
+		{
+			Path:        "/navigation/contactMethod/get",
+			Description: "获取单个联系方式",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
 		{
 			Path:        "/navigation/contactMethod/list",
 			Description: "获取联系方式列表",
 			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		// 游戏类别API
+		{
+			Path:        "/navigation/gameCategory/createGameCategory",
+			Description: "创建游戏类别",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/gameCategory/updateGameCategory",
+			Description: "更新游戏类别",
+			ApiGroup:    "导航管理",
+			Method:      "PUT",
+		},
+		{
+			Path:        "/navigation/gameCategory/deleteGameCategory",
+			Description: "删除游戏类别",
+			ApiGroup:    "导航管理",
+			Method:      "DELETE",
+		},
+		{
+			Path:        "/navigation/gameCategory/getGameCategoryList",
+			Description: "获取游戏类别列表",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/gameCategory/getAllGameCategories",
+			Description: "获取所有启用的游戏类别",
+			ApiGroup:    "导航管理",
 			Method:      "GET",
+		},
+		// 游戏管理API
+		{
+			Path:        "/navigation/game/createGame",
+			Description: "创建游戏",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/game/updateGame",
+			Description: "更新游戏",
+			ApiGroup:    "导航管理",
+			Method:      "PUT",
+		},
+		{
+			Path:        "/navigation/game/deleteGame",
+			Description: "删除游戏",
+			ApiGroup:    "导航管理",
+			Method:      "DELETE",
+		},
+		{
+			Path:        "/navigation/game/getGameList",
+			Description: "获取游戏列表",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/game/updateGameViews",
+			Description: "更新游戏浏览次数",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
 		},
 	}
 
@@ -128,8 +195,11 @@ func (s *NavApiCheckService) CheckNavigationApisExist() bool {
 		{"/navigation/contactConfig/get", "GET"},
 		{"/navigation/contactConfig/update", "PUT"},
 		{"/navigation/contactMethod/create", "POST"},
-		{"/navigation/contactMethod/list", "GET"},
-		{"/navigation/menuCheck/status", "GET"},
+		{"/navigation/contactMethod/list", "POST"},
+		{"/navigation/gameCategory/createGameCategory", "POST"},
+		{"/navigation/gameCategory/getGameCategoryList", "POST"},
+		{"/navigation/game/createGame", "POST"},
+		{"/navigation/game/getGameList", "POST"},
 	}
 
 	for _, api := range keyApis {
@@ -161,11 +231,18 @@ func (s *NavApiCheckService) GetNavigationApiStatus() map[string]interface{} {
 		{"/navigation/contactMethod/create", "POST", "创建联系方式"},
 		{"/navigation/contactMethod/update", "PUT", "更新联系方式"},
 		{"/navigation/contactMethod/delete", "DELETE", "删除联系方式"},
-		{"/navigation/contactMethod/get", "GET", "获取单个联系方式"},
-		{"/navigation/contactMethod/list", "GET", "获取联系方式列表"},
-		{"/navigation/menuCheck/status", "GET", "检查菜单状态"},
-		{"/navigation/menuCheck/create", "POST", "创建菜单"},
-		{"/navigation/menuCheck/refresh", "PUT", "刷新菜单"},
+		{"/navigation/contactMethod/get", "POST", "获取单个联系方式"},
+		{"/navigation/contactMethod/list", "POST", "获取联系方式列表"},
+		{"/navigation/gameCategory/createGameCategory", "POST", "创建游戏类别"},
+		{"/navigation/gameCategory/updateGameCategory", "PUT", "更新游戏类别"},
+		{"/navigation/gameCategory/deleteGameCategory", "DELETE", "删除游戏类别"},
+		{"/navigation/gameCategory/getGameCategoryList", "POST", "获取游戏类别列表"},
+		{"/navigation/gameCategory/getAllGameCategories", "GET", "获取所有启用的游戏类别"},
+		{"/navigation/game/createGame", "POST", "创建游戏"},
+		{"/navigation/game/updateGame", "PUT", "更新游戏"},
+		{"/navigation/game/deleteGame", "DELETE", "删除游戏"},
+		{"/navigation/game/getGameList", "POST", "获取游戏列表"},
+		{"/navigation/game/updateGameViews", "POST", "更新游戏浏览次数"},
 	}
 
 	apiStatus := make(map[string]bool)

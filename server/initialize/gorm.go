@@ -54,6 +54,8 @@ func RegisterTables() {
 
 		navigation.NavContactConfig{},
 		navigation.NavContactMethod{},
+		navigation.NavGameCategory{},
+		navigation.NavGame{},
 
 		example.ExaFile{},
 		example.ExaCustomer{},
