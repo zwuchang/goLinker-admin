@@ -36,6 +36,18 @@
         <el-form-item label="游戏内容" prop="content">
           <el-input v-model="form.content" type="textarea" :rows="4" placeholder="请输入游戏内容" />
         </el-form-item>
+        <el-form-item label="跳转地址" prop="jump_url">
+          <el-input v-model="form.jump_url" placeholder="请输入跳转地址" />
+        </el-form-item>
+        <el-form-item label="下载地址" prop="download_url">
+          <el-input v-model="form.download_url" placeholder="请输入下载地址" />
+        </el-form-item>
+        <el-form-item label="显示名称" prop="display_name">
+          <el-input v-model="form.display_name" placeholder="请输入显示名称" />
+        </el-form-item>
+        <el-form-item label="广告名称" prop="ad_name">
+          <el-input v-model="form.ad_name" placeholder="请输入广告名称" />
+        </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="form.sort" :min="0" />
         </el-form-item>
@@ -100,6 +112,10 @@ const form = reactive({
   video_duration: '',
   description: '',
   content: '',
+  jump_url: '',
+  download_url: '',
+  display_name: '',
+  ad_name: '',
   sort: 0,
   sticky: 0,
   is_visible: 1,
@@ -178,6 +194,13 @@ const resetForm = () => {
     type: 'image_text',
     video_url: '',
     video_duration: '',
+    description: '',
+    content: '',
+    jump_url: '',
+    download_url: '',
+    display_name: '',
+    ad_name: '',
+    sort: 0,
     sticky: 0,
     is_visible: 1,
     status: 1,

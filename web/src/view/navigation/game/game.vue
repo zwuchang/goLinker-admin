@@ -37,6 +37,12 @@
             <el-option label="隐藏" :value="0" />
           </el-select>
         </el-form-item>
+        <el-form-item label="显示名称">
+          <el-input v-model="searchInfo.display_name" placeholder="显示名称" />
+        </el-form-item>
+        <el-form-item label="广告名称">
+          <el-input v-model="searchInfo.ad_name" placeholder="广告名称" />
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="search" @click="onSubmit">
             查询
@@ -167,6 +173,34 @@
         </el-table-column>
         <el-table-column
           align="left"
+          label="显示名称"
+          min-width="120"
+          prop="display_name"
+          sortable="custom"
+        />
+        <el-table-column
+          align="left"
+          label="广告名称"
+          min-width="120"
+          prop="ad_name"
+          sortable="custom"
+        />
+        <el-table-column
+          align="left"
+          label="跳转地址"
+          min-width="200"
+          prop="jump_url"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          align="left"
+          label="下载地址"
+          min-width="200"
+          prop="download_url"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          align="left"
           label="创建时间"
           min-width="180"
           prop="CreatedAt"
@@ -230,7 +264,6 @@ import { getAllGameCategories } from '@/api/gameCategory'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import GameForm from './form.vue'
 import { useAppStore } from "@/pinia"
-import { toSQLLine } from '@/utils/stringFun'
 import { formatDate } from '@/utils/format'
 
 
@@ -284,7 +317,17 @@ const getTableData = async () => {
 }
 
 const onReset = () => {
-  searchInfo.value = {}
+  searchInfo.value = {
+    title: '',
+    category_id: null,
+    type: '',
+    status: null,
+    is_visible: null,
+    display_name: '',
+    ad_name: '',
+    order_by: '',
+    order_type: ''
+  }
   getTableData()
 }
 
@@ -308,11 +351,32 @@ const handleCurrentChange = (val) => {
 // 排序
 const sortChange = ({ prop, order }) => {
   if (prop) {
-    if (prop === 'ID') {
-      prop = 'id'
+    // 字段名映射
+    const fieldMap = {
+      'ID': 'id',
+      'title': 'title',
+      'type': 'type',
+      'status': 'status',
+      'is_visible': 'is_visible',
+      'views': 'views',
+      'display_name': 'display_name',
+      'ad_name': 'ad_name',
+      'CreatedAt': 'created_at'
     }
-    searchInfo.value.orderKey = toSQLLine(prop)
-    searchInfo.value.desc = order === 'descending'
+    
+    const orderBy = fieldMap[prop]
+    if (orderBy) {
+      searchInfo.value.order_by = orderBy
+      searchInfo.value.order_type = order === 'descending' ? 'desc' : 'asc'
+    } else {
+      // 清除排序参数
+      searchInfo.value.order_by = ''
+      searchInfo.value.order_type = ''
+    }
+  } else {
+    // 清除排序参数
+    searchInfo.value.order_by = ''
+    searchInfo.value.order_type = ''
   }
   getTableData()
 }

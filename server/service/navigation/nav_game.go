@@ -167,6 +167,12 @@ func (s *NavGameService) GetGameList(info navRequest.NavGameSearch) (list []navi
 	if info.Type != "" {
 		db = db.Where("type = ?", info.Type)
 	}
+	if info.DisplayName != "" {
+		db = db.Where("display_name LIKE ?", "%"+info.DisplayName+"%")
+	}
+	if info.AdName != "" {
+		db = db.Where("ad_name LIKE ?", "%"+info.AdName+"%")
+	}
 
 	// 获取总数
 	err = db.Count(&total).Error
@@ -175,14 +181,65 @@ func (s *NavGameService) GetGameList(info navRequest.NavGameSearch) (list []navi
 		return list, 0, err
 	}
 
+	// 安全排序处理
+	orderClause := s.buildSafeOrderClause(info.OrderBy, info.OrderType)
+
 	// 获取列表
-	err = db.Limit(limit).Offset(offset).Order("sticky DESC, sort ASC, created_at DESC").Find(&list).Error
+	err = db.Limit(limit).Offset(offset).Order(orderClause).Find(&list).Error
 	if err != nil {
 		global.GVA_LOG.Error("获取游戏列表失败", zap.Error(err))
 		return list, 0, err
 	}
 
 	return list, total, nil
+}
+
+// buildSafeOrderClause 构建安全的排序子句，防止SQL注入
+func (s *NavGameService) buildSafeOrderClause(orderBy, orderType string) string {
+	// 允许的排序字段白名单
+	allowedFields := map[string]string{
+		"id":           "id",
+		"title":        "title",
+		"type":         "type",
+		"status":       "status",
+		"is_visible":   "is_visible",
+		"sticky":       "sticky",
+		"views":        "views",
+		"sort":         "sort",
+		"display_name": "display_name",
+		"ad_name":      "ad_name",
+		"created_at":   "created_at",
+		"updated_at":   "updated_at",
+	}
+
+	// 默认排序
+	defaultOrder := "sticky DESC, sort ASC, created_at DESC"
+
+	// 验证排序字段
+	if orderBy == "" {
+		return defaultOrder
+	}
+
+	field, exists := allowedFields[orderBy]
+	if !exists {
+		global.GVA_LOG.Warn("不允许的排序字段", zap.String("field", orderBy))
+		return defaultOrder
+	}
+
+	// 验证排序类型
+	var orderDirection string
+	switch strings.ToLower(orderType) {
+	case "asc":
+		orderDirection = "ASC"
+	case "desc":
+		orderDirection = "DESC"
+	default:
+		global.GVA_LOG.Warn("不允许的排序类型", zap.String("type", orderType))
+		return defaultOrder
+	}
+
+	// 构建安全的排序子句
+	return field + " " + orderDirection
 }
 
 // UpdateGameViews 更新游戏浏览次数
