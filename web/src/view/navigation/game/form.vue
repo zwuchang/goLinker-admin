@@ -48,6 +48,15 @@
         <el-form-item label="广告名称" prop="ad_name">
           <el-input v-model="form.ad_name" placeholder="请输入广告名称" />
         </el-form-item>
+        <el-form-item label="游戏图标" prop="icon">
+          <div class="icon-upload-container">
+            <el-input v-model="form.icon" placeholder="请输入图标URL" style="margin-bottom: 10px;" />
+            <div class="icon-preview" v-if="form.icon">
+              <img :src="form.icon" alt="游戏图标" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;" />
+            </div>
+            <UploadImage @on-success="handleIconSuccess" />
+          </div>
+        </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="form.sort" :min="0" />
         </el-form-item>
@@ -86,6 +95,7 @@ import { ref, reactive, watch } from 'vue'
 import { createGame, updateGame } from '@/api/game'
 import { getAllGameCategories } from '@/api/gameCategory'
 import { ElMessage } from 'element-plus'
+import UploadImage from '@/components/upload/image.vue'
 
 const props = defineProps({
   id: {
@@ -116,6 +126,7 @@ const form = reactive({
   download_url: '',
   display_name: '',
   ad_name: '',
+  icon: '',
   sort: 0,
   sticky: 0,
   is_visible: 1,
@@ -137,6 +148,12 @@ const getCategoryList = async () => {
   if (res.code === 0) {
     categoryList.value = res.data
   }
+}
+
+// 图标上传成功处理
+const handleIconSuccess = (url) => {
+  form.icon = url
+  ElMessage.success('图标上传成功')
 }
 
 // 监听编辑数据变化
@@ -200,6 +217,7 @@ const resetForm = () => {
     download_url: '',
     display_name: '',
     ad_name: '',
+    icon: '',
     sort: 0,
     sticky: 0,
     is_visible: 1,
@@ -228,5 +246,17 @@ getCategoryList()
 .gva-form-box {
   max-width: 800px;
   margin: 0 auto;
+}
+
+.icon-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.icon-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 </style>

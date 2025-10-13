@@ -24,6 +24,8 @@ type NavGame struct {
 	DownloadUrl   string `json:"download_url" form:"download_url" gorm:"type:varchar(500);comment:下载地址"` // 下载地址
 	DisplayName   string `json:"display_name" form:"display_name" gorm:"type:varchar(200);comment:显示名称"` // 显示名称
 	AdName        string `json:"ad_name" form:"ad_name" gorm:"type:varchar(200);comment:广告名称"`           // 广告名称
+	Article       string `json:"article" form:"article" gorm:"type:longtext;comment:游戏文章"`               // 游戏文章（富文本）
+	Icon          string `json:"icon" form:"icon" gorm:"type:varchar(500);comment:游戏图标"`                 // 游戏图标
 }
 
 func (NavGame) TableName() string {

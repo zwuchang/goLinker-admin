@@ -84,6 +84,17 @@
             <span v-else>-</span>
           </template>
         </el-table-column>
+        <el-table-column align="left" label="游戏图标" prop="icon" width="100">
+          <template #default="scope">
+            <el-image
+              v-if="scope.row.icon"
+              :src="scope.row.icon"
+              style="width: 40px; height: 40px"
+              fit="cover"
+            />
+            <span v-else>-</span>
+          </template>
+        </el-table-column>
         <el-table-column
           align="left"
           label="游戏标题"
@@ -222,6 +233,23 @@
               编辑
             </el-button>
             <el-button
+              icon="edit"
+              type="warning"
+              link
+              @click="editArticleFunc(scope.row)"
+            >
+              编辑文章
+            </el-button>
+            <el-button
+              v-if="scope.row.article"
+              icon="document"
+              type="success"
+              link
+              @click="viewArticleFunc(scope.row)"
+            >
+              查看文章
+            </el-button>
+            <el-button
               icon="delete"
               type="primary"
               link
@@ -254,15 +282,47 @@
         @success="getTableData"
       />
     </el-dialog>
+
+    <!-- 文章查看弹窗 -->
+    <el-dialog v-model="articleDialogVisible" title="游戏文章" width="80%" top="5vh">
+      <div class="article-content">
+        <div v-if="currentArticle" v-html="currentArticle"></div>
+        <div v-else class="no-article">暂无文章内容</div>
+      </div>
+    </el-dialog>
+
+    <!-- 文章编辑弹窗 -->
+    <el-dialog 
+      v-model="articleEditDialogVisible" 
+      title="编辑游戏文章" 
+      width="90%" 
+      top="5vh"
+      :close-on-click-modal="false"
+      class="article-edit-dialog"
+    >
+      <div class="article-edit-container">
+        <div class="article-info">
+          <h3>{{ currentGameTitle }}</h3>
+        </div>
+        <div class="rich-editor-wrapper">
+          <RichEdit v-model="articleContent" />
+        </div>
+        <div class="article-actions">
+          <el-button type="primary" @click="saveArticle">保存文章</el-button>
+          <el-button @click="cancelArticleEdit">取消</el-button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getGameList, deleteGame, updateGameViews } from '@/api/game'
+import { getGameList, deleteGame, updateGameViews, updateGame } from '@/api/game'
 import { getAllGameCategories } from '@/api/gameCategory'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import GameForm from './form.vue'
+import RichEdit from '@/components/richtext/rich-edit.vue'
 import { useAppStore } from "@/pinia"
 import { formatDate } from '@/utils/format'
 
@@ -285,6 +345,16 @@ const dialogTitle = ref('新增游戏')
 const dialogFormVisible = ref(false)
 const formId = ref(0)
 const editData = ref({})
+
+// 文章查看相关
+const articleDialogVisible = ref(false)
+const currentArticle = ref('')
+
+// 文章编辑相关
+const articleEditDialogVisible = ref(false)
+const articleContent = ref('')
+const currentGameTitle = ref('')
+const currentGameId = ref(0)
 
 // 获取类别列表
 const getCategoryList = async () => {
@@ -443,6 +513,49 @@ const deleteGameFunc = async (row) => {
   })
 }
 
+// 查看文章
+const viewArticleFunc = (row) => {
+  currentArticle.value = row.article || ''
+  articleDialogVisible.value = true
+}
+
+// 编辑文章
+const editArticleFunc = (row) => {
+  currentGameId.value = row.ID
+  currentGameTitle.value = row.title
+  articleContent.value = row.article || ''
+  articleEditDialogVisible.value = true
+}
+
+// 保存文章
+const saveArticle = async () => {
+  try {
+    const res = await updateGame({
+      ID: currentGameId.value,
+      article: articleContent.value
+    })
+    if (res.code === 0) {
+      ElMessage.success('文章保存成功')
+      articleEditDialogVisible.value = false
+      // 更新本地数据
+      const game = tableData.value.find(item => item.ID === currentGameId.value)
+      if (game) {
+        game.article = articleContent.value
+      }
+    } 
+  } catch (error) {
+    ElMessage.error('保存失败')
+  }
+}
+
+// 取消文章编辑
+const cancelArticleEdit = () => {
+  articleEditDialogVisible.value = false
+  articleContent.value = ''
+  currentGameTitle.value = ''
+  currentGameId.value = 0
+}
+
 // 获取类别名称
 const getCategoryNames = (categoryIds) => {
   if (!categoryIds) return []
@@ -479,9 +592,7 @@ const editViews = async (row) => {
       ElMessage.success('浏览次数更新成功')
       // 更新本地数据
       row.views = views
-    } else {
-      ElMessage.error(res.msg || '更新失败')
-    }
+    } 
   } catch {
     // 用户取消操作
   }

@@ -54,32 +54,18 @@ func (a *NavGameApi) CreateGame(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept   application/json
 // @Produce  application/json
-// @Param    data body navigation.NavGame true "游戏信息"
+// @Param    data body navRequest.NavGameUpdateRequest true "游戏更新信息"
 // @Success  200  {object} response.Response{msg=string} "更新成功"
 // @Router   /navigation/game/updateGame [put]
 func (a *NavGameApi) UpdateGame(c *gin.Context) {
-	var game navigation.NavGame
-	err := c.ShouldBindJSON(&game)
+	var req navRequest.NavGameUpdateRequest
+	err := c.ShouldBindJSON(&req)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 
-	// 参数验证
-	if game.ID == 0 {
-		response.FailWithMessage("ID不能为空", c)
-		return
-	}
-	if game.Title == "" {
-		response.FailWithMessage("游戏标题不能为空", c)
-		return
-	}
-	if game.CategoryIds == "" {
-		response.FailWithMessage("游戏类别不能为空", c)
-		return
-	}
-
-	err = navGameService.UpdateGame(game)
+	err = navGameService.UpdateGame(req)
 	if err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
