@@ -151,6 +151,22 @@ func (s *ContactMethodService) GetNavContactMethodList(info request.PageInfo) (l
 	return methodList, total, nil
 }
 
+// GetEnabledContactMethods 获取启用的联系方式列表（按排序值排序）
+func (s *ContactMethodService) GetEnabledContactMethods() (list []navigation.NavContactMethod, err error) {
+	if global.GVA_DB == nil {
+		global.GVA_LOG.Error("数据库连接为空")
+		return nil, errors.New("数据库连接为空")
+	}
+
+	err = global.GVA_DB.Where("status = ?", 1).Order("sort ASC, created_at DESC").Find(&list).Error
+	if err != nil {
+		global.GVA_LOG.Error("获取启用的联系方式列表失败", zap.Error(err))
+		return list, err
+	}
+
+	return list, nil
+}
+
 // validateContactMethod 验证联系方式参数
 func (s *ContactMethodService) validateContactMethod(method *navigation.NavContactMethod) error {
 	if method == nil {

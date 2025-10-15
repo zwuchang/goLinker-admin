@@ -81,7 +81,7 @@ func (a *PublicApi) GetBannerList(c *gin.Context) {
 	req.IsVisible = &visible
 	req.Status = &status
 
-	list, total, err := service.ServiceGroupApp.NavigationServiceGroup.NavBannerService.GetBannerList(req)
+	list, total, err := navBannerService.GetBannerList(req)
 	if err != nil {
 		global.GVA_LOG.Error("获取Banner列表失败!", zap.Error(err))
 		response.FailWithMessage("获取Banner列表失败", c)
@@ -157,10 +157,17 @@ func (a *PublicApi) GetGameCategoryList(c *gin.Context) {
 		req.PageSize = 10
 	}
 
+	if req.Page <= 0 {
+		req.Page = 1
+	}
+	if req.PageSize <= 0 {
+		req.PageSize = 10
+	}
+
 	// 只获取启用的游戏类别
 	req.Status = 1
 
-	list, total, err := service.ServiceGroupApp.NavigationServiceGroup.NavGameCategoryService.GetGameCategoryList(req)
+	list, total, err := navGameCategoryService.GetGameCategoryList(req)
 	if err != nil {
 		global.GVA_LOG.Error("获取游戏类别列表失败!", zap.Error(err))
 		response.FailWithMessage("获取游戏类别列表失败", c)
@@ -187,4 +194,53 @@ func (a *PublicApi) GetGameCategoryList(c *gin.Context) {
 		"page":     req.Page,
 		"pageSize": req.PageSize,
 	}, "获取成功", c)
+}
+
+// GetContactInfo 获取联系方式信息（公开接口，无需认证）
+// @Tags     PublicApi
+// @Summary  获取联系方式信息
+// @accept   application/json
+// @Produce  application/json
+// @Success  200  {object} response.Response{data=navResponse.PublicContactResponse} "获取成功"
+// @Router   /public/contact/info [post]
+func (a *PublicApi) GetContactInfo(c *gin.Context) {
+	// 获取启用的联系方式列表
+	contactMethods, err := contactMethodService.GetEnabledContactMethods()
+	if err != nil {
+		global.GVA_LOG.Error("获取联系方式列表失败!", zap.Error(err))
+		response.FailWithMessage("获取联系方式列表失败", c)
+		return
+	}
+
+	// 获取联系配置
+	contactConfig, err := contactConfigService.GetNavContactConfig()
+	if err != nil {
+		global.GVA_LOG.Error("获取联系配置失败!", zap.Error(err))
+		response.FailWithMessage("获取联系配置失败", c)
+		return
+	}
+
+	// 转换联系方式数据
+	var contactMethodList []navResponse.ContactMethodInfo
+	for _, method := range contactMethods {
+		contactMethodList = append(contactMethodList, navResponse.ContactMethodInfo{
+			ID:          method.ID,
+			Image:       method.Image,
+			JumpUrl:     method.JumpUrl,
+			DisplayName: method.DisplayName,
+			Sort:        method.Sort,
+		})
+	}
+
+	// 构建响应数据
+	contactInfo := navResponse.PublicContactResponse{
+		ContactMethods: contactMethodList,
+		ContactConfig: navResponse.ContactConfigInfo{
+			BannerImage: contactConfig.BannerImage,
+			Email:       contactConfig.Email,
+		},
+		UpdateTime: contactConfig.UpdatedAt.Format("2006-01-02 15:04:05"),
+	}
+
+	response.OkWithDetailed(contactInfo, "获取成功", c)
 }
