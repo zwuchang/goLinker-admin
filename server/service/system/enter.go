@@ -18,4 +18,5 @@ type ServiceGroup struct {
 	SysParamsService
 	SysVersionService
 	CronService
+	IpService
 }

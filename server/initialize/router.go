@@ -103,6 +103,8 @@ func Routers() *gin.Engine {
 		navigationRouter.InitGameRouter(PrivateGroup)                       // 导航-游戏管理
 		navigationRouter.InitGameConfigRouter(PrivateGroup)                 // 导航-游戏配置
 		navigationRouter.InitBannerRouter(PrivateGroup)                     // 导航-Banner配置
+		navigationRouter.InitAccessStatsRouter(PrivateGroup)                // 导航-访问统计
+		navigationRouter.InitPublicRouter(PublicGroup)                      // 公开接口（无需认证）
 		exampleRouter.InitCustomerRouter(PrivateGroup)                      // 客户路由
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)         // 文件上传下载功能路由
 		exampleRouter.InitAttachmentCategoryRouterRouter(PrivateGroup)      // 文件上传下载分类

@@ -185,6 +185,24 @@ func (s *NavApiCheckService) CheckAndCreateNavigationApis() error {
 			ApiGroup:    "导航管理",
 			Method:      "POST",
 		},
+		{
+			Path:        "/navigation/accessStats/getAccessStatsList",
+			Description: "获取访问统计列表",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/accessStats/getAccessStatsSummary",
+			Description: "获取访问统计汇总",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/accessStats/cleanOldStats",
+			Description: "清理旧数据",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
 	}
 
 	// 检查并创建每个API

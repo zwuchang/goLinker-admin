@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/mark3labs/mcp-go/server"
+	"github.com/zhengjianyang/goCzdb"
 
 	"github.com/gin-gonic/gin"
 	"github.com/qiniu/qmgo"
@@ -41,6 +42,7 @@ var (
 	GVA_MCP_SERVER          *server.MCPServer
 	BlackCache              local_cache.Cache
 	lock                    sync.RWMutex
+	IpSearcher              *goCzdb.DbSearcher
 )
 
 const (

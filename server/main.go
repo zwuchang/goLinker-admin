@@ -32,6 +32,10 @@ import (
 func main() {
 	// 初始化系统
 	initializeSystem()
+
+	// 程序结束前关闭IP地址库
+	defer initialize.CloseIPSearcher()
+
 	// 运行服务器
 	core.RunServer()
 }
@@ -44,10 +48,13 @@ func initializeSystem() {
 	global.GVA_LOG = core.Zap() // 初始化zap日志库
 	zap.ReplaceGlobals(global.GVA_LOG)
 	global.GVA_DB = initialize.Gorm() // gorm连接数据库
+	initialize.InitIpSearcher()       // 初始化IP地址库
+
 	initialize.Timer()
 	initialize.DBList()
 	initialize.WebSocket()     // websocket
 	initialize.SetupHandlers() // 注册全局函数
+
 	if global.GVA_DB != nil {
 		initialize.RegisterTables() // 初始化表
 

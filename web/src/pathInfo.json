@@ -42,6 +42,7 @@
   "/src/view/layout/setting/modules/layout/index.vue": "LayoutSettings",
   "/src/view/layout/tabs/index.vue": "HistoryComponent",
   "/src/view/login/index.vue": "Login",
+  "/src/view/navigation/banner/banner.vue": "Banner",
   "/src/view/navigation/contactConfig/contactConfig.vue": "ContactConfig",
   "/src/view/navigation/contactMethod/contactMethod.vue": "ContactMethod",
   "/src/view/navigation/game/form.vue": "Form",

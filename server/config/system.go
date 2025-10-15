@@ -14,4 +14,5 @@ type System struct {
 	InviteBaseURL string `mapstructure:"invite-base-url" json:"invite-base-url" yaml:"invite-base-url"` // 邀请链接基础URL
 	HTTPProxy     string `mapstructure:"http-proxy" json:"http-proxy" yaml:"http-proxy"`                // http代理
 	Env           string `mapstructure:"env" json:"env" yaml:"env"`                                     // 环境 dev|prod
+	IpDbPath      string `mapstructure:"ip-db-path" json:"ip-db-path" yaml:"ip-db-path"`                // IP地址库路径
 }
