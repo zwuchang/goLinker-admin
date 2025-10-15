@@ -8,6 +8,7 @@ type ApiGroup struct {
 	NavGameCategoryApi
 	NavGameApi
 	NavGameConfigApi
+	NavBannerApi
 }
 
 var (
@@ -16,4 +17,5 @@ var (
 	navGameCategoryService = navigation.ServiceGroupApp.NavGameCategoryService
 	navGameService         = navigation.ServiceGroupApp.NavGameService
 	navGameConfigService   = navigation.ServiceGroupApp.NavGameConfigService
+	navBannerService       = navigation.ServiceGroupApp.NavBannerService
 )

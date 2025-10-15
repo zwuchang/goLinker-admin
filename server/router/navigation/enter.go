@@ -8,6 +8,7 @@ type RouterGroup struct {
 	NavGameCategoryRouter
 	NavGameRouter
 	NavGameConfigRouter
+	NavBannerRouter
 }
 
 var (
@@ -16,4 +17,5 @@ var (
 	navGameCategoryApi  = api.ApiGroupApp.NavigationApiGroup.NavGameCategoryApi
 	navGameApi          = api.ApiGroupApp.NavigationApiGroup.NavGameApi
 	navGameConfigApi    = api.ApiGroupApp.NavigationApiGroup.NavGameConfigApi
+	navBannerApi        = api.ApiGroupApp.NavigationApiGroup.NavBannerApi
 )

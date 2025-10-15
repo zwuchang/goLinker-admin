@@ -154,6 +154,37 @@ func (s *NavApiCheckService) CheckAndCreateNavigationApis() error {
 			ApiGroup:    "导航管理",
 			Method:      "POST",
 		},
+		// Banner配置API
+		{
+			Path:        "/navigation/banner/getBannerList",
+			Description: "获取Banner列表",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/banner/getBannerById",
+			Description: "根据ID获取Banner",
+			ApiGroup:    "导航管理",
+			Method:      "GET",
+		},
+		{
+			Path:        "/navigation/banner/createBanner",
+			Description: "创建Banner",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/banner/updateBanner",
+			Description: "更新Banner",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/banner/deleteBanner",
+			Description: "删除Banner",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
 	}
 
 	// 检查并创建每个API
@@ -233,6 +264,8 @@ func (s *NavApiCheckService) CheckNavigationApisExist() bool {
 		{"/navigation/game/getGameList", "POST"},
 		{"/navigation/gameConfig/createGameConfig", "POST"},
 		{"/navigation/gameConfig/getGameConfig", "GET"},
+		{"/navigation/banner/getBannerList", "POST"},
+		{"/navigation/banner/createBanner", "POST"},
 	}
 
 	for _, api := range keyApis {
@@ -281,6 +314,11 @@ func (s *NavApiCheckService) GetNavigationApiStatus() map[string]interface{} {
 		{"/navigation/gameConfig/deleteGameConfig", "DELETE", "删除游戏配置"},
 		{"/navigation/gameConfig/getGameConfig", "GET", "获取游戏配置"},
 		{"/navigation/gameConfig/getGameConfigList", "POST", "获取游戏配置列表"},
+		{"/navigation/banner/getBannerList", "POST", "获取Banner列表"},
+		{"/navigation/banner/getBannerById", "GET", "根据ID获取Banner"},
+		{"/navigation/banner/createBanner", "POST", "创建Banner"},
+		{"/navigation/banner/updateBanner", "POST", "更新Banner"},
+		{"/navigation/banner/deleteBanner", "DELETE", "删除Banner"},
 	}
 
 	apiStatus := make(map[string]bool)

@@ -8,6 +8,7 @@ type ServiceGroup struct {
 	NavGameCategoryService
 	NavGameService
 	NavGameConfigService
+	NavBannerService
 }
 
 var ServiceGroupApp = new(ServiceGroup)

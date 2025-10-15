@@ -155,7 +155,7 @@ func (api *NavGameConfigApi) DeleteGameConfig(c *gin.Context) {
 		return
 	}
 
-	err = navService.ServiceGroupApp.NavGameConfigService.DeleteGameConfig(req.ID)
+	err = navGameConfigService.DeleteGameConfig(req.ID)
 	if err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
