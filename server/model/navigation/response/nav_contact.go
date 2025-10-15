@@ -33,3 +33,11 @@ type NavContactConfigResponse struct {
 type NavContactMethodResponse struct {
 	ContactMethod navigation.NavContactMethod `json:"contactMethod"`
 }
+
+// NavGameArticleResponse 游戏文章响应
+type NavGameArticleResponse struct {
+	GameId     uint   `json:"gameId"`     // 游戏ID
+	Title      string `json:"title"`      // 游戏标题
+	Article    string `json:"article"`    // 文章内容
+	UpdateTime string `json:"updateTime"` // 更新时间
+}

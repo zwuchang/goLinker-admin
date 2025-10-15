@@ -301,6 +301,31 @@ func (s *NavGameService) GetGameList(info request.NavGameSearch) (list []navigat
 	return list, total, nil
 }
 
+// GetGameById 根据ID获取游戏信息
+func (s *NavGameService) GetGameById(id uint) (game navigation.NavGame, err error) {
+	if global.GVA_DB == nil {
+		global.GVA_LOG.Error("数据库连接为空")
+		return game, errors.New("数据库连接为空")
+	}
+
+	// 参数验证
+	if id == 0 {
+		return game, errors.New("游戏ID不能为空")
+	}
+
+	err = global.GVA_DB.Where("id = ?", id).First(&game).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			global.GVA_LOG.Error("游戏不存在", zap.Uint("id", id))
+			return game, errors.New("游戏不存在")
+		}
+		global.GVA_LOG.Error("获取游戏失败", zap.Error(err), zap.Uint("id", id))
+		return game, err
+	}
+
+	return game, nil
+}
+
 // buildSafeOrderClause 构建安全的排序子句，防止SQL注入
 func (s *NavGameService) buildSafeOrderClause(orderBy, orderType string) string {
 	// 允许的排序字段白名单

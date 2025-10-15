@@ -17,10 +17,10 @@ type PublicApi struct{}
 
 // GetSiteInfo 获取网站信息（公开接口，无需认证）
 // @Tags     PublicApi
-// @Summary  获取网站信息
+// @Summary  Get website information
 // @accept   application/json
 // @Produce  application/json
-// @Success  200  {object} response.Response{data=navResponse.PublicSiteInfoResponse} "获取成功"
+// @Success  200  {object} response.Response{data=navResponse.PublicSiteInfoResponse} "Success"
 // @Router   /public/site/info [post]
 func (a *PublicApi) GetSiteInfo(c *gin.Context) {
 	// 获取最新的游戏配置作为网站信息
@@ -32,7 +32,7 @@ func (a *PublicApi) GetSiteInfo(c *gin.Context) {
 	})
 	if err != nil || len(gameConfigs) == 0 {
 		global.GVA_LOG.Error("获取网站信息失败!", zap.Error(err))
-		response.FailWithMessage("获取网站信息失败", c)
+		response.FailWithMessage("Failed to get website information", c)
 		return
 	}
 
@@ -47,16 +47,16 @@ func (a *PublicApi) GetSiteInfo(c *gin.Context) {
 		UpdateTime:   config.UpdatedAt.Format("2006-01-02 15:04:05"),
 	}
 
-	response.OkWithDetailed(siteInfo, "获取成功", c)
+	response.OkWithDetailed(siteInfo, "Success", c)
 }
 
 // GetBannerList 获取Banner列表（公开接口，无需认证）
 // @Tags     PublicApi
-// @Summary  获取Banner列表
+// @Summary  Get banner list
 // @accept   application/json
 // @Produce  application/json
-// @Param    data body navRequest.NavBannerSearch true "Banner搜索参数"
-// @Success  200  {object} response.Response{data=map[string]interface{}} "获取成功"
+// @Param    data body navRequest.NavBannerSearch true "Banner search parameters"
+// @Success  200  {object} response.Response{data=map[string]interface{}} "Success"
 // @Router   /public/banner/list [post]
 func (a *PublicApi) GetBannerList(c *gin.Context) {
 	var req navRequest.NavBannerSearch
@@ -84,7 +84,7 @@ func (a *PublicApi) GetBannerList(c *gin.Context) {
 	list, total, err := navBannerService.GetBannerList(req)
 	if err != nil {
 		global.GVA_LOG.Error("获取Banner列表失败!", zap.Error(err))
-		response.FailWithMessage("获取Banner列表失败", c)
+		response.FailWithMessage("Failed to get banner list", c)
 		return
 	}
 
@@ -93,16 +93,16 @@ func (a *PublicApi) GetBannerList(c *gin.Context) {
 		"total":    total,
 		"page":     req.Page,
 		"pageSize": req.PageSize,
-	}, "获取成功", c)
+	}, "Success", c)
 }
 
 // GetGameList 获取游戏列表（公开接口，无需认证）
 // @Tags     PublicApi
-// @Summary  获取游戏列表
+// @Summary  Get game list
 // @accept   application/json
 // @Produce  application/json
-// @Param    data body navRequest.NavGameSearch true "游戏搜索参数"
-// @Success  200  {object} response.Response{data=map[string]interface{}} "获取成功"
+// @Param    data body navRequest.NavGameSearch true "Game search parameters"
+// @Success  200  {object} response.Response{data=map[string]interface{}} "Success"
 // @Router   /public/game/list [post]
 func (a *PublicApi) GetGameList(c *gin.Context) {
 	var req navRequest.NavGameSearch
@@ -128,7 +128,7 @@ func (a *PublicApi) GetGameList(c *gin.Context) {
 	list, total, err := navGameService.GetGameList(req)
 	if err != nil {
 		global.GVA_LOG.Error("获取游戏列表失败!", zap.Error(err))
-		response.FailWithMessage("获取游戏列表失败", c)
+		response.FailWithMessage("Failed to get game list", c)
 		return
 	}
 
@@ -137,16 +137,16 @@ func (a *PublicApi) GetGameList(c *gin.Context) {
 		"total":    total,
 		"page":     req.Page,
 		"pageSize": req.PageSize,
-	}, "获取成功", c)
+	}, "Success", c)
 }
 
 // GetGameCategoryList 获取游戏类别列表（公开接口，无需认证）
 // @Tags     PublicApi
-// @Summary  获取游戏类别列表
+// @Summary  Get game category list
 // @accept   application/json
 // @Produce  application/json
-// @Param    data body navRequest.NavGameCategorySearch true "游戏类别搜索参数"
-// @Success  200  {object} response.Response{data=map[string]interface{}} "获取成功"
+// @Param    data body navRequest.NavGameCategorySearch true "Game category search parameters"
+// @Success  200  {object} response.Response{data=map[string]interface{}} "Success"
 // @Router   /public/gameCategory/list [post]
 func (a *PublicApi) GetGameCategoryList(c *gin.Context) {
 	var req navRequest.NavGameCategorySearch
@@ -170,7 +170,7 @@ func (a *PublicApi) GetGameCategoryList(c *gin.Context) {
 	list, total, err := navGameCategoryService.GetGameCategoryList(req)
 	if err != nil {
 		global.GVA_LOG.Error("获取游戏类别列表失败!", zap.Error(err))
-		response.FailWithMessage("获取游戏类别列表失败", c)
+		response.FailWithMessage("Failed to get game category list", c)
 		return
 	}
 
@@ -193,22 +193,22 @@ func (a *PublicApi) GetGameCategoryList(c *gin.Context) {
 		"total":    total,
 		"page":     req.Page,
 		"pageSize": req.PageSize,
-	}, "获取成功", c)
+	}, "Success", c)
 }
 
 // GetContactInfo 获取联系方式信息（公开接口，无需认证）
 // @Tags     PublicApi
-// @Summary  获取联系方式信息
+// @Summary  Get contact information
 // @accept   application/json
 // @Produce  application/json
-// @Success  200  {object} response.Response{data=navResponse.PublicContactResponse} "获取成功"
+// @Success  200  {object} response.Response{data=navResponse.PublicContactResponse} "Success"
 // @Router   /public/contact/info [post]
 func (a *PublicApi) GetContactInfo(c *gin.Context) {
 	// 获取启用的联系方式列表
 	contactMethods, err := contactMethodService.GetEnabledContactMethods()
 	if err != nil {
 		global.GVA_LOG.Error("获取联系方式列表失败!", zap.Error(err))
-		response.FailWithMessage("获取联系方式列表失败", c)
+		response.FailWithMessage("Failed to get contact information", c)
 		return
 	}
 
@@ -216,7 +216,7 @@ func (a *PublicApi) GetContactInfo(c *gin.Context) {
 	contactConfig, err := contactConfigService.GetNavContactConfig()
 	if err != nil {
 		global.GVA_LOG.Error("获取联系配置失败!", zap.Error(err))
-		response.FailWithMessage("获取联系配置失败", c)
+		response.FailWithMessage("Failed to get contact information", c)
 		return
 	}
 
@@ -242,5 +242,46 @@ func (a *PublicApi) GetContactInfo(c *gin.Context) {
 		UpdateTime: contactConfig.UpdatedAt.Format("2006-01-02 15:04:05"),
 	}
 
-	response.OkWithDetailed(contactInfo, "获取成功", c)
+	response.OkWithDetailed(contactInfo, "Success", c)
+}
+
+// GetGameArticle 根据游戏ID获取文章内容（公开接口，无需认证）
+// @Tags     PublicApi
+// @Summary  Get game article by game ID
+// @accept   application/json
+// @Produce  application/json
+// @Param    data body navRequest.NavGameArticleRequest true "Game article request parameters"
+// @Success  200  {object} response.Response{data=navResponse.NavGameArticleResponse} "Success"
+// @Router   /public/game/article [post]
+func (a *PublicApi) GetGameArticle(c *gin.Context) {
+	var req navRequest.NavGameArticleRequest
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage("Invalid request parameters", c)
+		return
+	}
+
+	// 获取游戏信息
+	game, err := navGameService.GetGameById(req.GameId)
+	if err != nil {
+		global.GVA_LOG.Error("获取游戏信息失败!", zap.Error(err))
+		response.FailWithMessage("Game not found", c)
+		return
+	}
+
+	// 检查游戏是否可见
+	if game.IsVisible != 1 || game.Status != 1 {
+		response.FailWithMessage("Game not available", c)
+		return
+	}
+
+	// 构建响应数据
+	articleInfo := navResponse.NavGameArticleResponse{
+		GameId:     game.ID,
+		Title:      game.Title,
+		Article:    game.Article,
+		UpdateTime: game.UpdatedAt.Format("2006-01-02 15:04:05"),
+	}
+
+	response.OkWithDetailed(articleInfo, "Success", c)
 }

@@ -19,5 +19,6 @@ func (s *PublicRouter) InitPublicRouter(Router *gin.RouterGroup) {
 		publicRouter.POST("game/list", publicApi.GetGameList)                 // 获取游戏列表
 		publicRouter.POST("gameCategory/list", publicApi.GetGameCategoryList) // 获取游戏类别列表
 		publicRouter.POST("contact/info", publicApi.GetContactInfo)           // 获取联系方式信息
+		publicRouter.POST("game/article", publicApi.GetGameArticle)           // 根据游戏ID获取文章内容
 	}
 }
