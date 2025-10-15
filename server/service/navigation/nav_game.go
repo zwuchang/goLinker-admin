@@ -5,6 +5,7 @@ import (
 	"goLinker-admin/server/global"
 	"goLinker-admin/server/model/navigation"
 	"goLinker-admin/server/model/navigation/request"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -29,7 +30,7 @@ func (s *NavGameService) CreateGame(game navigation.NavGame) (err error) {
 		return errors.New("游戏类别不能为空")
 	}
 
-	// 验证类别ID是否存在
+	// 验证类别ID是否存在并排序
 	categoryIds := strings.Trim(game.CategoryIds, "[]")
 	if categoryIds != "" {
 		categoryIdList := strings.Split(categoryIds, ",")
@@ -53,11 +54,26 @@ func (s *NavGameService) CreateGame(game navigation.NavGame) (err error) {
 		}
 	}
 
+	// 对分类ID进行排序
+	sortedCategoryIds, err := sortCategoryIds(game.CategoryIds)
+	if err != nil {
+		return err
+	}
+	game.CategoryIds = sortedCategoryIds
+
 	// 创建游戏
 	err = global.GVA_DB.Create(&game).Error
 	if err != nil {
 		global.GVA_LOG.Error("创建游戏失败", zap.Error(err))
 		return err
+	}
+
+	// 创建分类关联
+	relationService := &NavGameCategoryRelationService{}
+	err = relationService.CreateGameCategoryRelations(game.ID, game.CategoryIds)
+	if err != nil {
+		global.GVA_LOG.Error("创建游戏分类关联失败", zap.Error(err))
+		// 注意：这里不返回错误，因为游戏已经创建成功，只是关联创建失败
 	}
 
 	global.GVA_LOG.Info("创建游戏成功", zap.String("title", game.Title))
@@ -120,7 +136,21 @@ func (s *NavGameService) UpdateGame(req request.NavGameUpdateRequest) (err error
 				}
 			}
 		}
-		updateFields["category_ids"] = *req.CategoryIds
+
+		// 对分类ID进行排序
+		sortedCategoryIds, err := sortCategoryIds(*req.CategoryIds)
+		if err != nil {
+			return err
+		}
+		updateFields["category_ids"] = sortedCategoryIds
+
+		// 更新分类关联
+		relationService := &NavGameCategoryRelationService{}
+		err = relationService.CreateGameCategoryRelations(req.ID, sortedCategoryIds)
+		if err != nil {
+			global.GVA_LOG.Error("更新游戏分类关联失败", zap.Error(err))
+			// 注意：这里不返回错误，因为游戏更新成功，只是关联更新失败
+		}
 	}
 
 	// 如果传递了其他字段，则更新对应字段
@@ -231,7 +261,9 @@ func (s *NavGameService) GetGameList(info request.NavGameSearch) (list []navigat
 		db = db.Where("title LIKE ?", "%"+info.Title+"%")
 	}
 	if info.CategoryId != 0 {
-		db = db.Where("category_ids LIKE ?", "%"+strconv.FormatUint(uint64(info.CategoryId), 10)+"%")
+		// 使用LEFT JOIN进行精确查询，支持分页和总数统计
+		db = db.Joins("LEFT JOIN nav_game_category_relation ON nav_game.id = nav_game_category_relation.game_id").
+			Where("nav_game_category_relation.category_id = ?", info.CategoryId)
 	}
 	if info.Status != 0 {
 		db = db.Where("status = ?", info.Status)
@@ -337,4 +369,44 @@ func (s *NavGameService) UpdateGameViews(id uint) (err error) {
 	}
 
 	return nil
+}
+
+// sortCategoryIds 对分类ID进行排序，确保小的在前，大的在后
+func sortCategoryIds(categoryIds string) (string, error) {
+	if categoryIds == "" {
+		return "", nil
+	}
+
+	// 移除方括号并分割
+	idsStr := strings.Trim(categoryIds, "[]")
+	if idsStr == "" {
+		return "[]", nil
+	}
+
+	// 分割并解析ID
+	idList := strings.Split(idsStr, ",")
+	var ids []uint
+	for _, idStr := range idList {
+		idStr = strings.TrimSpace(idStr)
+		if idStr != "" {
+			id, err := strconv.ParseUint(idStr, 10, 32)
+			if err != nil {
+				return "", errors.New("类别ID格式错误: " + idStr)
+			}
+			ids = append(ids, uint(id))
+		}
+	}
+
+	// 排序
+	sort.Slice(ids, func(i, j int) bool {
+		return ids[i] < ids[j]
+	})
+
+	// 重新组装为字符串
+	var result []string
+	for _, id := range ids {
+		result = append(result, strconv.FormatUint(uint64(id), 10))
+	}
+
+	return "[" + strings.Join(result, ",") + "]", nil
 }

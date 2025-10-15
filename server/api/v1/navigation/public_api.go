@@ -62,8 +62,17 @@ func (a *PublicApi) GetBannerList(c *gin.Context) {
 	var req navRequest.NavBannerSearch
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
+		// 如果JSON绑定失败，使用默认值
+		req.Page = 1
+		req.PageSize = 10
+	}
+
+	// 设置默认分页参数
+	if req.Page <= 0 {
+		req.Page = 1
+	}
+	if req.PageSize <= 0 {
+		req.PageSize = 10
 	}
 
 	// 只获取可见的Banner
@@ -99,15 +108,24 @@ func (a *PublicApi) GetGameList(c *gin.Context) {
 	var req navRequest.NavGameSearch
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
+		// 如果JSON绑定失败，使用默认值
+		req.Page = 1
+		req.PageSize = 10
+	}
+
+	// 设置默认分页参数
+	if req.Page <= 0 {
+		req.Page = 1
+	}
+	if req.PageSize <= 0 {
+		req.PageSize = 10
 	}
 
 	// 只获取可见的游戏
 	req.IsVisible = 1
 	req.Status = 1
 
-	list, total, err := service.ServiceGroupApp.NavigationServiceGroup.NavGameService.GetGameList(req)
+	list, total, err := navGameService.GetGameList(req)
 	if err != nil {
 		global.GVA_LOG.Error("获取游戏列表失败!", zap.Error(err))
 		response.FailWithMessage("获取游戏列表失败", c)
@@ -116,6 +134,55 @@ func (a *PublicApi) GetGameList(c *gin.Context) {
 
 	response.OkWithDetailed(map[string]interface{}{
 		"list":     list,
+		"total":    total,
+		"page":     req.Page,
+		"pageSize": req.PageSize,
+	}, "获取成功", c)
+}
+
+// GetGameCategoryList 获取游戏类别列表（公开接口，无需认证）
+// @Tags     PublicApi
+// @Summary  获取游戏类别列表
+// @accept   application/json
+// @Produce  application/json
+// @Param    data body navRequest.NavGameCategorySearch true "游戏类别搜索参数"
+// @Success  200  {object} response.Response{data=map[string]interface{}} "获取成功"
+// @Router   /public/gameCategory/list [post]
+func (a *PublicApi) GetGameCategoryList(c *gin.Context) {
+	var req navRequest.NavGameCategorySearch
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		// 如果JSON绑定失败，使用默认值
+		req.Page = 1
+		req.PageSize = 10
+	}
+
+	// 只获取启用的游戏类别
+	req.Status = 1
+
+	list, total, err := service.ServiceGroupApp.NavigationServiceGroup.NavGameCategoryService.GetGameCategoryList(req)
+	if err != nil {
+		global.GVA_LOG.Error("获取游戏类别列表失败!", zap.Error(err))
+		response.FailWithMessage("获取游戏类别列表失败", c)
+		return
+	}
+
+	// 只返回ID和名称
+	type CategoryInfo struct {
+		ID   uint   `json:"id"`
+		Name string `json:"name"`
+	}
+
+	var categoryList []CategoryInfo
+	for _, category := range list {
+		categoryList = append(categoryList, CategoryInfo{
+			ID:   category.ID,
+			Name: category.Name,
+		})
+	}
+
+	response.OkWithDetailed(map[string]interface{}{
+		"list":     categoryList,
 		"total":    total,
 		"page":     req.Page,
 		"pageSize": req.PageSize,
