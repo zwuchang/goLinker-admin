@@ -1,6 +1,7 @@
 package navigation
 
 import (
+	"encoding/json"
 	"goLinker-admin/server/global"
 	commonRequest "goLinker-admin/server/model/common/request"
 	"goLinker-admin/server/model/common/response"
@@ -283,5 +284,18 @@ func (a *PublicApi) GetGameArticle(c *gin.Context) {
 		UpdateTime: game.UpdatedAt.Format("2006-01-02 15:04:05"),
 	}
 
-	response.OkWithDetailed(articleInfo, "Success", c)
+	// 使用json.NewEncoder并关闭HTML转义
+	c.Header("Content-Type", "application/json; charset=utf-8")
+	c.Status(200)
+
+	encoder := json.NewEncoder(c.Writer)
+	encoder.SetEscapeHTML(false) // 关闭HTML转义
+
+	responseData := response.Response{
+		Code: 0,
+		Data: articleInfo,
+		Msg:  "Success",
+	}
+
+	encoder.Encode(responseData)
 }

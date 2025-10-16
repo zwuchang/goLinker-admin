@@ -14,11 +14,11 @@ func (s *NavAccessStatsRouter) InitAccessStatsRouter(Router *gin.RouterGroup) {
 	accessStatsNoLoggedRouter := Router.Group("navigation/accessStats")
 	accessStatsRouter.Use(middleware.OperationRecord())
 	{
-		accessStatsRouter.POST("getAccessStatsList", navAccessStatsApi.GetAccessStatsList)       // 获取访问统计列表
-		accessStatsRouter.POST("getAccessStatsSummary", navAccessStatsApi.GetAccessStatsSummary) // 获取访问统计汇总
+		accessStatsNoLoggedRouter.POST("getAccessStatsList", navAccessStatsApi.GetAccessStatsList)       // 获取访问统计列表
+		accessStatsNoLoggedRouter.POST("getAccessStatsSummary", navAccessStatsApi.GetAccessStatsSummary) // 获取访问统计汇总
 	}
 	{
-		accessStatsNoLoggedRouter.POST("cleanOldStats", navAccessStatsApi.CleanOldStats) // 清理旧数据
+		accessStatsRouter.POST("cleanOldStats", navAccessStatsApi.CleanOldStats) // 清理旧数据
 
 	}
 }

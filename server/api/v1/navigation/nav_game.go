@@ -1,6 +1,7 @@
 package navigation
 
 import (
+	"encoding/json"
 	"goLinker-admin/server/global"
 	"goLinker-admin/server/model/common/response"
 	"goLinker-admin/server/model/navigation"
@@ -122,12 +123,25 @@ func (a *NavGameApi) GetGameList(c *gin.Context) {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 	} else {
-		response.OkWithDetailed(response.PageResult{
-			List:     list,
-			Total:    total,
-			Page:     pageInfo.Page,
-			PageSize: pageInfo.PageSize,
-		}, "获取成功", c)
+		// 使用json.NewEncoder并关闭HTML转义
+		c.Header("Content-Type", "application/json; charset=utf-8")
+		c.Status(200)
+
+		encoder := json.NewEncoder(c.Writer)
+		encoder.SetEscapeHTML(false) // 关闭HTML转义
+
+		responseData := response.Response{
+			Code: 0,
+			Data: response.PageResult{
+				List:     list,
+				Total:    total,
+				Page:     pageInfo.Page,
+				PageSize: pageInfo.PageSize,
+			},
+			Msg: "获取成功",
+		}
+
+		encoder.Encode(responseData)
 	}
 }
 
