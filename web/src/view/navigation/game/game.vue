@@ -295,8 +295,8 @@
     <el-dialog 
       v-model="articleEditDialogVisible" 
       title="编辑游戏文章" 
-      width="90%" 
-      top="5vh"
+      width="95%" 
+      top="3vh"
       :close-on-click-modal="false"
       class="article-edit-dialog"
     >
@@ -304,8 +304,28 @@
         <div class="article-info">
           <h3>{{ currentGameTitle }}</h3>
         </div>
-        <div class="rich-editor-wrapper">
-          <RichEdit v-model="articleContent" />
+        <div class="editor-layout">
+          <div class="editor-left">
+            <div class="editor-header">
+              <span>源码编辑</span>
+            </div>
+            <el-input
+              v-model="articleContent"
+              type="textarea"
+              :rows="20"
+              placeholder="请输入HTML源码..."
+              class="source-editor"
+            />
+          </div>
+          <div class="editor-right">
+            <div class="editor-header">
+              <span>预览</span>
+            </div>
+            <div class="preview-container">
+              <div v-if="articleContent" v-html="articleContent" class="preview-content"></div>
+              <div v-else class="preview-placeholder">暂无内容预览</div>
+            </div>
+          </div>
         </div>
         <div class="article-actions">
           <el-button type="primary" @click="saveArticle">保存文章</el-button>
@@ -322,7 +342,6 @@ import { getGameList, deleteGame, updateGameViews, updateGame } from '@/api/game
 import { getAllGameCategories } from '@/api/gameCategory'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import GameForm from './form.vue'
-import RichEdit from '@/components/richtext/rich-edit.vue'
 import { useAppStore } from "@/pinia"
 import { formatDate } from '@/utils/format'
 
@@ -617,6 +636,136 @@ onMounted(() => {
   
   &:hover {
     background-color: #f5f7fa;
+  }
+}
+
+// 文章编辑弹窗样式
+.article-edit-dialog {
+  .article-edit-container {
+    .article-info {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e4e7ed;
+      
+      h3 {
+        margin: 0;
+        color: #303133;
+        font-size: 18px;
+        font-weight: 600;
+      }
+    }
+    
+    .editor-layout {
+      display: flex;
+      gap: 20px;
+      height: 500px;
+      
+      .editor-left,
+      .editor-right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        
+        .editor-header {
+          padding: 10px 15px;
+          background-color: #f5f7fa;
+          border: 1px solid #e4e7ed;
+          border-bottom: none;
+          font-weight: 600;
+          color: #606266;
+          font-size: 14px;
+        }
+      }
+      
+      .editor-left {
+        .source-editor {
+          flex: 1;
+          
+          :deep(.el-textarea__inner) {
+            height: 100% !important;
+            resize: none;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+          }
+        }
+      }
+      
+      .editor-right {
+        .preview-container {
+          flex: 1;
+          border: 1px solid #e4e7ed;
+          border-top: none;
+          background-color: #fff;
+          overflow-y: auto;
+          padding: 15px;
+          
+          .preview-content {
+            min-height: 100%;
+            
+            // 预览内容样式
+            img {
+              max-width: 100%;
+              height: auto;
+            }
+            
+            p {
+              margin: 0 0 10px 0;
+              line-height: 1.6;
+            }
+            
+            a {
+              color: #409eff;
+              text-decoration: none;
+              
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+          }
+          
+          .preview-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #909399;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+    
+    .article-actions {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid #e4e7ed;
+      text-align: right;
+      
+      .el-button {
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+// 文章查看弹窗样式
+.article-content {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 20px;
+  
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .no-article {
+    text-align: center;
+    color: #909399;
+    padding: 40px 0;
   }
 }
 </style>
