@@ -15,3 +15,4 @@ type NavGameCategoryRelation struct {
 func (NavGameCategoryRelation) TableName() string {
 	return "nav_game_category_relation"
 }
+

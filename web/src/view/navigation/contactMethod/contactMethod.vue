@@ -111,7 +111,7 @@
         </el-form-item>
         
         <el-form-item label="联系方式图标">
-          <select-image v-model="form.image" />
+          <el-input v-model="form.image" placeholder="请输入联系方式图标" />
         </el-form-item>
         
         <el-form-item label="排序">
@@ -137,7 +137,6 @@ import {
   getContactMethod,
   getContactMethodList
 } from '@/api/contactMethod'
-import SelectImage from '@/components/selectImage/selectImage.vue'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { formatDate } from '@/utils/format'

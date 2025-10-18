@@ -396,6 +396,37 @@ func (s *NavGameService) UpdateGameViews(id uint) (err error) {
 	return nil
 }
 
+// GetStickyGames 获取置顶游戏列表（用于广告展示）
+func (s *NavGameService) GetStickyGames(info request.NavAdsSearch) (list []navigation.NavGame, total int64, err error) {
+	if global.GVA_DB == nil {
+		global.GVA_LOG.Error("数据库连接为空")
+		return list, 0, errors.New("数据库连接为空")
+	}
+
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	db := global.GVA_DB.Model(&navigation.NavGame{})
+
+	// 只获取置顶、可见、启用的游戏
+	db = db.Where("sticky = ? AND is_visible = ? AND status = ?", 1, 1, 1)
+
+	// 获取总数
+	err = db.Count(&total).Error
+	if err != nil {
+		global.GVA_LOG.Error("获取置顶游戏总数失败", zap.Error(err))
+		return list, 0, err
+	}
+
+	// 按排序字段和创建时间排序
+	err = db.Limit(limit).Offset(offset).Order("sort ASC, created_at DESC").Find(&list).Error
+	if err != nil {
+		global.GVA_LOG.Error("获取置顶游戏列表失败", zap.Error(err))
+		return list, 0, err
+	}
+
+	return list, total, nil
+}
+
 // sortCategoryIds 对分类ID进行排序，确保小的在前，大的在后
 func sortCategoryIds(categoryIds string) (string, error) {
 	if categoryIds == "" {

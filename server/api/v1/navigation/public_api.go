@@ -299,3 +299,62 @@ func (a *PublicApi) GetGameArticle(c *gin.Context) {
 
 	encoder.Encode(responseData)
 }
+
+// GetAdsList 获取广告列表（置顶游戏）
+// @Tags     PublicApi
+// @Summary  Get ads list (sticky games)
+// @accept   application/json
+// @Produce  application/json
+// @Param    data body navRequest.NavAdsSearch true "Ads search parameters"
+// @Success  200  {object} response.Response{data=navResponse.NavAdsListResponse} "Success"
+// @Router   /public/ads/index [post]
+func (a *PublicApi) GetAdsList(c *gin.Context) {
+	var req navRequest.NavAdsSearch
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		// 如果JSON绑定失败，使用默认值
+		req.Page = 1
+		req.PageSize = 10
+	}
+
+	// 设置默认分页参数
+	if req.Page <= 0 {
+		req.Page = 1
+	}
+	if req.PageSize <= 0 {
+		req.PageSize = 10
+	}
+
+	// 固定取24条数据
+	req.Page = 1
+	req.PageSize = 24
+
+	// 获取置顶游戏列表
+	list, total, err := navGameService.GetStickyGames(req)
+	if err != nil {
+		global.GVA_LOG.Error("获取广告列表失败!", zap.Error(err))
+		response.FailWithMessage("Failed to get ads list", c)
+		return
+	}
+
+	// 转换为广告响应格式
+	var adsList []navResponse.NavAdsItemResponse
+	for _, game := range list {
+		adsList = append(adsList, navResponse.NavAdsItemResponse{
+			ID:          game.ID,
+			AdName:      game.AdName,
+			Image:       game.Icon,
+			RedirectUrl: game.JumpUrl,
+		})
+	}
+
+	// 构建响应数据
+	adsResponse := navResponse.NavAdsListResponse{
+		List:     adsList,
+		Total:    total,
+		Page:     req.Page,
+		PageSize: req.PageSize,
+	}
+
+	response.OkWithDetailed(adsResponse, "Success", c)
+}

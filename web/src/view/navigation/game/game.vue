@@ -25,6 +25,12 @@
             <el-option label="视频" value="video" />
           </el-select>
         </el-form-item>
+        <el-form-item label="是否置顶">
+          <el-select v-model="searchInfo.sticky" clearable placeholder="请选择">
+            <el-option label="是" value="1" />
+            <el-option label="否" value="0" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="searchInfo.status" clearable placeholder="请选择">
             <el-option label="启用" :value="1" />
@@ -415,7 +421,8 @@ const onReset = () => {
     display_name: '',
     ad_name: '',
     order_by: '',
-    order_type: ''
+    order_type: '',
+    sticky: '',
   }
   getTableData()
 }

@@ -8,7 +8,7 @@
           </el-form-item>
           
           <el-form-item label="横幅图片">
-            <select-image v-model="form.bannerImage" />
+            <el-input v-model="form.bannerImage" placeholder="请输入联系客服横幅图片" />
           </el-form-item>
           
           <el-form-item>
