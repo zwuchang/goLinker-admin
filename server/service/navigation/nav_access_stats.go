@@ -101,12 +101,16 @@ func (s *NavAccessStatsService) GetAccessStatsSummary(startTime, endTime string)
 	}
 
 	// 平均响应时间
-	var avgResponseTime float64
+	var avgResponseTime *float64
 	err = baseQuery().Select("AVG(response_time)").Scan(&avgResponseTime).Error
 	if err != nil {
 		return
 	}
-	summary.AvgResponseTime = avgResponseTime
+	if avgResponseTime != nil {
+		summary.AvgResponseTime = *avgResponseTime
+	} else {
+		summary.AvgResponseTime = 0
+	}
 
 	// 成功率
 	var successCount int64

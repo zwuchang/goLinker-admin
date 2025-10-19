@@ -10,6 +10,7 @@ import (
 	navResponse "goLinker-admin/server/model/navigation/response"
 	"goLinker-admin/server/service"
 	"math/rand/v2"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -406,4 +407,19 @@ func (a *PublicApi) GetMenus(c *gin.Context) {
 	}
 
 	response.OkWithDetailed(menuList, "Success", c)
+}
+
+// GetGame 获取对应游戏（公开接口，无需认证）
+// @Tags     PublicApi
+// @Summary  Get game by ID
+// @accept   application/json
+// @Produce  application/json
+// @Param    data body navRequest.NavGameRequest true "Game request parameters"
+// @Success  200  {object} response.Response{data=navResponse.NavGameResponse} "Success"
+// @Router   /public/platform/getGame [post]
+func (a *PublicApi) GetGame(c *gin.Context) {
+
+	time.Sleep(1 * time.Second)
+	response.OkWithDetailed(nil, "Success", c)
+
 }

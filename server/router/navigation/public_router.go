@@ -22,5 +22,6 @@ func (s *PublicRouter) InitPublicRouter(Router *gin.RouterGroup) {
 		publicRouter.POST("game/article", publicApi.GetGameArticle)       // 根据游戏ID获取文章内容
 		publicRouter.POST("ads/index", publicApi.GetAdsList)              // 获取广告列表（置顶游戏）
 		publicRouter.POST("platform/menus", publicApi.GetMenus)           // 获取平台菜单列表
+		publicRouter.POST("platform/getGame", publicApi.GetGame)          // 获取对应游戏
 	}
 }
