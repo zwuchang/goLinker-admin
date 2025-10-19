@@ -448,7 +448,10 @@ func (a *PublicApi) GetMarket(c *gin.Context) {
 		return
 	}
 
-	// 获取指定类型的可见市场配置
+	var marketList []navResponse.PublicMarketItemResponse
+	var marketLogo string
+
+	// 获取指定类型的可见市场配置（不管type为多少都查询市场配置）
 	marketConfigs, err := navMarketConfigService.GetMarketConfigsByType(req.Type, 10)
 	if err != nil {
 		global.GVA_LOG.Error("获取市场配置列表失败!", zap.Error(err))
@@ -462,7 +465,6 @@ func (a *PublicApi) GetMarket(c *gin.Context) {
 	})
 
 	// 转换为公开市场配置响应格式
-	var marketList []navResponse.PublicMarketItemResponse
 	for _, config := range marketConfigs {
 		marketList = append(marketList, navResponse.PublicMarketItemResponse{
 			ID:      config.ID,
@@ -472,12 +474,26 @@ func (a *PublicApi) GetMarket(c *gin.Context) {
 		})
 	}
 
+	// 只有当type不为1时，才查询market_logo（只查询一次）
+	if req.Type != 1 {
+		gameConfigs, _, err := navGameConfigService.GetGameConfigList(navRequest.NavGameConfigSearch{
+			PageInfo: commonRequest.PageInfo{Page: 1, PageSize: 1},
+			NavGameConfig: navigation.NavGameConfig{
+				Status: 1, // 只获取启用的配置
+			},
+		})
+		if err == nil && len(gameConfigs) > 0 {
+			marketLogo = gameConfigs[0].MarketLogo
+		}
+	}
+
 	// 构建响应数据
 	marketResponse := navResponse.PublicMarketListResponse{
-		List:     marketList,
-		Total:    int64(len(marketList)),
-		Page:     1,
-		PageSize: len(marketList),
+		List:       marketList,
+		MarketLogo: marketLogo,
+		Total:      int64(len(marketList)),
+		Page:       1,
+		PageSize:   len(marketList),
 	}
 
 	response.OkWithDetailed(marketResponse, "Success", c)

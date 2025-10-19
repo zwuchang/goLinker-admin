@@ -13,6 +13,7 @@ type NavGameConfig struct {
 	WebsiteDesc  string `json:"website_desc" form:"website_desc" gorm:"type:text;comment:网站描述"`           // 网站描述
 	WebsiteIcon  string `json:"website_icon" form:"website_icon" gorm:"type:varchar(500);comment:网站图标"`   // 网站图标
 	WebsiteLogo  string `json:"website_logo" form:"website_logo" gorm:"type:varchar(500);comment:网站Logo"` // 网站Logo
+	MarketLogo   string `json:"market_logo" form:"market_logo" gorm:"type:varchar(500);comment:市场Logo"`   // 市场Logo
 	Status       int    `json:"status" form:"status" gorm:"comment:状态;default:1"`                         // 状态 1:启用 0:禁用
 }
 

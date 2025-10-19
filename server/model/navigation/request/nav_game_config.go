@@ -21,6 +21,7 @@ type CreateNavGameConfigRequest struct {
 	WebsiteDesc  string `json:"website_desc" form:"website_desc"`                      // 网站描述
 	WebsiteIcon  string `json:"website_icon" form:"website_icon"`                      // 网站图标
 	WebsiteLogo  string `json:"website_logo" form:"website_logo"`                      // 网站Logo
+	MarketLogo   string `json:"market_logo" form:"market_logo"`                        // 市场Logo
 	Status       int    `json:"status" form:"status"`                                  // 状态
 }
 
@@ -33,5 +34,6 @@ type UpdateNavGameConfigRequest struct {
 	WebsiteDesc  string `json:"website_desc" form:"website_desc"`                      // 网站描述
 	WebsiteIcon  string `json:"website_icon" form:"website_icon"`                      // 网站图标
 	WebsiteLogo  string `json:"website_logo" form:"website_logo"`                      // 网站Logo
+	MarketLogo   string `json:"market_logo" form:"market_logo"`                        // 市场Logo
 	Status       int    `json:"status" form:"status"`                                  // 状态
 }

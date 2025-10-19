@@ -20,6 +20,9 @@
         <el-form-item label="网站Logo" prop="website_logo">
           <el-input v-model="form.website_logo" placeholder="请输入网站Logo URL" />
         </el-form-item>
+        <el-form-item label="市场Logo" prop="market_logo">
+          <el-input v-model="form.market_logo" placeholder="请输入市场Logo URL" />
+        </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio :label="1">启用</el-radio>
@@ -62,6 +65,7 @@ const form = reactive({
   website_desc: '',
   website_icon: '',
   website_logo: '',
+  market_logo: '',
   status: 1
 })
 
@@ -105,6 +109,7 @@ const resetForm = () => {
     website_desc: '',
     website_icon: '',
     website_logo: '',
+    market_logo: '',
     status: 1
   })
 }

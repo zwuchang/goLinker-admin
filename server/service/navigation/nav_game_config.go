@@ -36,6 +36,7 @@ func (navGameConfigService *NavGameConfigService) CreateGameConfig(gameConfig na
 		WebsiteDesc:  gameConfig.WebsiteDesc,
 		WebsiteIcon:  gameConfig.WebsiteIcon,
 		WebsiteLogo:  gameConfig.WebsiteLogo,
+		MarketLogo:   gameConfig.MarketLogo,
 		Status:       gameConfig.Status,
 	}
 
@@ -75,6 +76,7 @@ func (navGameConfigService *NavGameConfigService) UpdateGameConfig(gameConfig na
 		"website_desc":  gameConfig.WebsiteDesc,
 		"website_icon":  gameConfig.WebsiteIcon,
 		"website_logo":  gameConfig.WebsiteLogo,
+		"market_logo":   gameConfig.MarketLogo,
 		"status":        gameConfig.Status,
 	}
 

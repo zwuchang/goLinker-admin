@@ -103,7 +103,20 @@ func (api *NavGameConfigApi) GetGameConfig(c *gin.Context) {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 	} else {
-		response.OkWithDetailed(navResponse.NavGameConfigResponse{GameConfig: gameConfig}, "获取成功", c)
+		responseData := navResponse.NavGameConfigResponse{
+			ID:           gameConfig.ID,
+			DownloadUrl:  gameConfig.DownloadUrl,
+			AudioUrl:     gameConfig.AudioUrl,
+			WebsiteTitle: gameConfig.WebsiteTitle,
+			WebsiteDesc:  gameConfig.WebsiteDesc,
+			WebsiteIcon:  gameConfig.WebsiteIcon,
+			WebsiteLogo:  gameConfig.WebsiteLogo,
+			MarketLogo:   gameConfig.MarketLogo,
+			Status:       gameConfig.Status,
+			CreatedAt:    gameConfig.CreatedAt.Format("2006-01-02 15:04:05"),
+			UpdatedAt:    gameConfig.UpdatedAt.Format("2006-01-02 15:04:05"),
+		}
+		response.OkWithDetailed(responseData, "获取成功", c)
 	}
 }
 

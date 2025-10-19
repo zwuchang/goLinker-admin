@@ -71,6 +71,13 @@
         />
         <el-table-column
           align="left"
+          label="市场Logo"
+          min-width="200"
+          prop="market_logo"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          align="left"
           label="状态"
           min-width="100"
           prop="status"

@@ -33,8 +33,10 @@ type PublicMarketItemResponse struct {
 
 // PublicMarketListResponse 公开市场配置列表响应
 type PublicMarketListResponse struct {
-	List     []PublicMarketItemResponse `json:"list"`
-	Total    int64                      `json:"-"`
-	Page     int                        `json:"-"`
-	PageSize int                        `json:"-"`
+	List       []PublicMarketItemResponse `json:"list"`
+	MarketLogo string                     `json:"market_logo"`
+
+	Total    int64 `json:"-"`
+	Page     int   `json:"-"`
+	PageSize int   `json:"-"`
 }
