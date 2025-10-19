@@ -115,6 +115,20 @@ func (s *NavMenuCheckService) CheckAndCreateNavigationMenus() error {
 				Icon:  "picture",
 			},
 		},
+		// 平台配置子菜单
+		{
+			MenuLevel: 1,
+			Hidden:    false,
+			ParentId:  0, // 稍后会更新为实际的父菜单ID
+			Path:      "platformConfig",
+			Name:      "platformConfig",
+			Component: "view/navigation/platformConfig/platformConfig.vue",
+			Sort:      7,
+			Meta: system.Meta{
+				Title: "平台配置",
+				Icon:  "platform",
+			},
+		},
 	}
 
 	// 检查并创建主菜单

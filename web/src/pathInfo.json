@@ -52,6 +52,7 @@
   "/src/view/navigation/gameConfig/form.vue": "Form",
   "/src/view/navigation/gameConfig/gameConfig.vue": "GameConfig",
   "/src/view/navigation/index.vue": "Navigation",
+  "/src/view/navigation/platformConfig/platformConfig.vue": "PlatformConfig",
   "/src/view/person/person.vue": "Person",
   "/src/view/routerHolder.vue": "RouterHolder",
   "/src/view/superAdmin/api/api.vue": "Api",

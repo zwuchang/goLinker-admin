@@ -203,6 +203,37 @@ func (s *NavApiCheckService) CheckAndCreateNavigationApis() error {
 			ApiGroup:    "导航管理",
 			Method:      "POST",
 		},
+		// 平台配置API
+		{
+			Path:        "/navigation/platformConfig/createPlatformConfig",
+			Description: "创建平台游戏配置",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/platformConfig/updatePlatformConfig",
+			Description: "更新平台游戏配置",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/platformConfig/deletePlatformConfig",
+			Description: "删除平台游戏配置",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/platformConfig/getPlatformConfigList",
+			Description: "获取平台游戏配置列表",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/platformConfig/getPlatformConfigById",
+			Description: "根据ID获取平台游戏配置",
+			ApiGroup:    "导航管理",
+			Method:      "GET",
+		},
 	}
 
 	// 检查并创建每个API

@@ -263,7 +263,7 @@ func (s *NavGameService) GetGameList(info request.NavGameSearch) (list []navigat
 	if info.CategoryId != 0 {
 		// 使用LEFT JOIN进行精确查询，支持分页和总数统计
 		db = db.Joins("LEFT JOIN nav_game_category_relation ON nav_game.id = nav_game_category_relation.game_id").
-			Where("nav_game_category_relation.category_id = ?", info.CategoryId)
+			Where("nav_game_category_relation.category_id = ? and nav_game_category_relation.deleted_at is null", info.CategoryId)
 	}
 	if info.Status != 0 {
 		db = db.Where("status = ?", info.Status)
@@ -279,6 +279,10 @@ func (s *NavGameService) GetGameList(info request.NavGameSearch) (list []navigat
 	}
 	if info.AdName != "" {
 		db = db.Where("ad_name LIKE ?", "%"+info.AdName+"%")
+	}
+
+	if info.Sticky != 0 {
+		db = db.Where("sticky = ?", info.Sticky)
 	}
 
 	// 获取总数

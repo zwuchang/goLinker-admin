@@ -19,3 +19,19 @@ type NavGameListResponse struct {
 	Page     int                  `json:"page"`
 	PageSize int                  `json:"pageSize"`
 }
+
+type PublicGameItemResponse struct {
+	ID        uint   `json:"id"`
+	Title     string `json:"title"`
+	Image     string `json:"image"`
+	Views     int    `json:"views"`
+	CreatedAt string `json:"created_at"`
+}
+
+// PublicGameListResponse 公开游戏列表响应
+type PublicGameListResponse struct {
+	List     []PublicGameItemResponse `json:"list"`
+	Total    int64                    `json:"total"`
+	Page     int                      `json:"page"`
+	PageSize int                      `json:"pageSize"`
+}

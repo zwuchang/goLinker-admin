@@ -27,8 +27,8 @@
         </el-form-item>
         <el-form-item label="是否置顶">
           <el-select v-model="searchInfo.sticky" clearable placeholder="请选择">
-            <el-option label="是" value="1" />
-            <el-option label="否" value="0" />
+            <el-option label="是" :value="1" />
+            <el-option label="否" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item label="状态">

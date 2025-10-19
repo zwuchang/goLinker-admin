@@ -9,6 +9,7 @@ import (
 	navRequest "goLinker-admin/server/model/navigation/request"
 	navResponse "goLinker-admin/server/model/navigation/response"
 	"goLinker-admin/server/service"
+	"math/rand/v2"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -133,12 +134,26 @@ func (a *PublicApi) GetGameList(c *gin.Context) {
 		return
 	}
 
-	response.OkWithDetailed(map[string]interface{}{
-		"list":     list,
-		"total":    total,
-		"page":     req.Page,
-		"pageSize": req.PageSize,
-	}, "Success", c)
+	var itemList []navResponse.PublicGameItemResponse
+	for _, game := range list {
+		itemList = append(itemList, navResponse.PublicGameItemResponse{
+			ID:        game.ID,
+			Title:     game.Title,
+			Image:     game.Icon,
+			Views:     game.Views,
+			CreatedAt: game.CreatedAt.Format("2006-01-02 15:04:05"),
+		})
+	}
+
+	// 转换为公开游戏列表响应
+	publicGameList := navResponse.PublicGameListResponse{
+		List:     itemList,
+		Total:    total,
+		Page:     req.Page,
+		PageSize: req.PageSize,
+	}
+
+	response.OkWithDetailed(publicGameList, "Success", c)
 }
 
 // GetGameCategoryList 获取游戏类别列表（公开接口，无需认证）
@@ -337,6 +352,11 @@ func (a *PublicApi) GetAdsList(c *gin.Context) {
 		return
 	}
 
+	// 随机打乱数据
+	rand.Shuffle(len(list), func(i, j int) {
+		list[i], list[j] = list[j], list[i]
+	})
+
 	// 转换为广告响应格式
 	var adsList []navResponse.NavAdsItemResponse
 	for _, game := range list {
@@ -357,4 +377,33 @@ func (a *PublicApi) GetAdsList(c *gin.Context) {
 	}
 
 	response.OkWithDetailed(adsResponse, "Success", c)
+}
+
+// GetMenus 获取平台菜单列表（公开接口，无需认证）
+// @Tags     PublicApi
+// @Summary  Get platform menus list
+// @accept   application/json
+// @Produce  application/json
+// @Success  200  {object} response.Response{data=[]navResponse.PublicPlatformMenuResponse} "Success"
+// @Router   /public/menus [post]
+func (a *PublicApi) GetMenus(c *gin.Context) {
+	// 获取可见的平台配置列表
+	platformConfigs, err := navPlatformConfigService.GetVisiblePlatformConfigs()
+	if err != nil {
+		global.GVA_LOG.Error("获取平台菜单列表失败!", zap.Error(err))
+		response.FailWithMessage("Failed to get platform menus", c)
+		return
+	}
+
+	// 转换为公开平台菜单响应格式
+	var menuList []navResponse.PublicPlatformMenuResponse
+	for _, config := range platformConfigs {
+		menuList = append(menuList, navResponse.PublicPlatformMenuResponse{
+			ID:           config.ID,
+			PlatformName: config.PlatformName,
+			PlatformIcon: config.PlatformIcon,
+		})
+	}
+
+	response.OkWithDetailed(menuList, "Success", c)
 }

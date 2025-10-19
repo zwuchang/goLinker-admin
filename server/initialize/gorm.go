@@ -60,6 +60,7 @@ func RegisterTables() {
 		navigation.NavBanner{},
 		navigation.NavAccessStats{},
 		navigation.NavGameCategoryRelation{},
+		navigation.NavPlatformConfig{},
 
 		example.ExaFile{},
 		example.ExaCustomer{},

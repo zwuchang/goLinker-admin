@@ -11,14 +11,16 @@ type ApiGroup struct {
 	NavBannerApi
 	PublicApi
 	NavAccessStatsApi
+	NavPlatformConfigApi
 }
 
 var (
-	contactConfigService   = navigation.ServiceGroupApp.ContactConfigService
-	contactMethodService   = navigation.ServiceGroupApp.ContactMethodService
-	navGameCategoryService = navigation.ServiceGroupApp.NavGameCategoryService
-	navGameService         = navigation.ServiceGroupApp.NavGameService
-	navGameConfigService   = navigation.ServiceGroupApp.NavGameConfigService
-	navBannerService       = navigation.ServiceGroupApp.NavBannerService
-	navAccessStatsService  = navigation.ServiceGroupApp.NavAccessStatsService
+	contactConfigService     = navigation.ServiceGroupApp.ContactConfigService
+	contactMethodService     = navigation.ServiceGroupApp.ContactMethodService
+	navGameCategoryService   = navigation.ServiceGroupApp.NavGameCategoryService
+	navGameService           = navigation.ServiceGroupApp.NavGameService
+	navGameConfigService     = navigation.ServiceGroupApp.NavGameConfigService
+	navBannerService         = navigation.ServiceGroupApp.NavBannerService
+	navAccessStatsService    = navigation.ServiceGroupApp.NavAccessStatsService
+	navPlatformConfigService = navigation.ServiceGroupApp.NavPlatformConfigService
 )
