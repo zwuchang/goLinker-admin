@@ -6,6 +6,8 @@ import (
 	"goLinker-admin/server/model/navigation/request"
 	"goLinker-admin/server/model/navigation/response"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type NavAccessStatsService struct{}
@@ -74,31 +76,33 @@ func (s *NavAccessStatsService) GetAccessStatsList(info request.NavAccessStatsSe
 
 // GetAccessStatsSummary 获取访问统计汇总
 func (s *NavAccessStatsService) GetAccessStatsSummary(startTime, endTime string) (summary response.NavAccessStatsSummaryResponse, err error) {
-	db := global.GVA_DB.Model(&navigation.NavAccessStats{})
-
-	// 时间范围过滤
-	if startTime != "" {
-		db = db.Where("created_at >= ?", startTime)
-	}
-	if endTime != "" {
-		db = db.Where("created_at <= ?", endTime)
+	// 创建基础查询条件
+	baseQuery := func() *gorm.DB {
+		db := global.GVA_DB.Model(&navigation.NavAccessStats{})
+		if startTime != "" {
+			db = db.Where("created_at >= ?", startTime)
+		}
+		if endTime != "" {
+			db = db.Where("created_at <= ?", endTime)
+		}
+		return db
 	}
 
 	// 总请求数
-	err = db.Count(&summary.TotalRequests).Error
+	err = baseQuery().Count(&summary.TotalRequests).Error
 	if err != nil {
 		return
 	}
 
 	// 独立IP数
-	err = db.Distinct("client_ip").Count(&summary.UniqueIPs).Error
+	err = baseQuery().Distinct("client_ip").Count(&summary.UniqueIPs).Error
 	if err != nil {
 		return
 	}
 
 	// 平均响应时间
 	var avgResponseTime float64
-	err = db.Select("AVG(response_time)").Scan(&avgResponseTime).Error
+	err = baseQuery().Select("AVG(response_time)").Scan(&avgResponseTime).Error
 	if err != nil {
 		return
 	}
@@ -106,7 +110,7 @@ func (s *NavAccessStatsService) GetAccessStatsSummary(startTime, endTime string)
 
 	// 成功率
 	var successCount int64
-	err = db.Where("status_code >= 200 AND status_code < 300").Count(&successCount).Error
+	err = baseQuery().Where("status_code >= 200 AND status_code < 300").Count(&successCount).Error
 	if err != nil {
 		return
 	}
@@ -116,7 +120,7 @@ func (s *NavAccessStatsService) GetAccessStatsSummary(startTime, endTime string)
 
 	// 热门API路径
 	var topApiPaths []response.ApiPathCount
-	err = db.Select("api_path, COUNT(*) as count").
+	err = baseQuery().Select("api_path, COUNT(*) as count").
 		Group("api_path").
 		Order("count DESC").
 		Limit(10).
@@ -128,7 +132,7 @@ func (s *NavAccessStatsService) GetAccessStatsSummary(startTime, endTime string)
 
 	// 热门国家
 	var topCountries []response.CountryCount
-	err = db.Select("country, COUNT(*) as count").
+	err = baseQuery().Select("country, COUNT(*) as count").
 		Where("country != ''").
 		Group("country").
 		Order("count DESC").
@@ -141,7 +145,7 @@ func (s *NavAccessStatsService) GetAccessStatsSummary(startTime, endTime string)
 
 	// 热门设备
 	var topDevices []response.DeviceCount
-	err = db.Select("device, COUNT(*) as count").
+	err = baseQuery().Select("device, COUNT(*) as count").
 		Where("device != ''").
 		Group("device").
 		Order("count DESC").
@@ -154,7 +158,7 @@ func (s *NavAccessStatsService) GetAccessStatsSummary(startTime, endTime string)
 
 	// 热门浏览器
 	var topBrowsers []response.BrowserCount
-	err = db.Select("browser, COUNT(*) as count").
+	err = baseQuery().Select("browser, COUNT(*) as count").
 		Where("browser != ''").
 		Group("browser").
 		Order("count DESC").
