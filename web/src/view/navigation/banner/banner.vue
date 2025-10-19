@@ -116,6 +116,7 @@
       :title="dialogTitle"
       width="600px"
       :close-on-click-modal="false"
+      destroy-on-close
     >
       <el-form
         ref="formRef"

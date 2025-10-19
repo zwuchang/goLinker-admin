@@ -129,7 +129,7 @@
     </div>
 
     <!-- 表单弹窗 -->
-    <el-dialog v-model="dialogFormVisible" :title="dialogTitle" width="800px">
+    <el-dialog v-model="dialogFormVisible" :title="dialogTitle" width="800px" destroy-on-close>
       <GameConfigForm
         :id="formId"
         :edit-data="editData"

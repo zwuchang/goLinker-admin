@@ -280,7 +280,7 @@
     </div>
 
     <!-- 表单弹窗 -->
-    <el-dialog v-model="dialogFormVisible" :title="dialogTitle" width="800px">
+    <el-dialog v-model="dialogFormVisible" :title="dialogTitle" width="800px" destroy-on-close>
       <GameForm
         :id="formId"
         :edit-data="editData"
@@ -290,7 +290,7 @@
     </el-dialog>
 
     <!-- 文章查看弹窗 -->
-    <el-dialog v-model="articleDialogVisible" title="游戏文章" width="80%" top="5vh">
+    <el-dialog v-model="articleDialogVisible" title="游戏文章" width="80%" top="5vh" destroy-on-close>
       <div class="article-content">
         <div v-if="currentArticle" v-html="currentArticle"></div>
         <div v-else class="no-article">暂无文章内容</div>
@@ -305,6 +305,7 @@
       top="3vh"
       :close-on-click-modal="false"
       class="article-edit-dialog"
+      destroy-on-close
     >
       <div class="article-edit-container">
         <div class="article-info">

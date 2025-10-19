@@ -152,7 +152,7 @@
     </div>
 
     <!-- 表单弹窗 -->
-    <el-dialog v-model="dialogFormVisible" :title="dialogTitle" width="600px">
+    <el-dialog v-model="dialogFormVisible" :title="dialogTitle" width="600px" destroy-on-close>
       <PlatformConfigForm
         :id="formId"
         :edit-data="editData"
