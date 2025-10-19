@@ -12,6 +12,7 @@ type ServiceGroup struct {
 	NavAccessStatsService
 	NavGameCategoryRelationService
 	NavPlatformConfigService
+	NavMarketConfigService
 }
 
 var ServiceGroupApp = new(ServiceGroup)

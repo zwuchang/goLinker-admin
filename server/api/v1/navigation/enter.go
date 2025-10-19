@@ -12,6 +12,7 @@ type ApiGroup struct {
 	PublicApi
 	NavAccessStatsApi
 	NavPlatformConfigApi
+	NavMarketConfigApi
 }
 
 var (
@@ -23,4 +24,5 @@ var (
 	navBannerService         = navigation.ServiceGroupApp.NavBannerService
 	navAccessStatsService    = navigation.ServiceGroupApp.NavAccessStatsService
 	navPlatformConfigService = navigation.ServiceGroupApp.NavPlatformConfigService
+	navMarketConfigService   = navigation.ServiceGroupApp.NavMarketConfigService
 )

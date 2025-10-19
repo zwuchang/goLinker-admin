@@ -135,6 +135,11 @@ func (a *PublicApi) GetGameList(c *gin.Context) {
 		return
 	}
 
+	// 随机打乱数据
+	rand.Shuffle(len(list), func(i, j int) {
+		list[i], list[j] = list[j], list[i]
+	})
+
 	var itemList []navResponse.PublicGameItemResponse
 	for _, game := range list {
 		itemList = append(itemList, navResponse.PublicGameItemResponse{
@@ -300,6 +305,9 @@ func (a *PublicApi) GetGameArticle(c *gin.Context) {
 		UpdateTime: game.UpdatedAt.Format("2006-01-02 15:04:05"),
 	}
 
+	// 增加浏览次数
+	navGameService.UpdateGameViews(game.ID)
+
 	// 使用json.NewEncoder并关闭HTML转义
 	c.Header("Content-Type", "application/json; charset=utf-8")
 	c.Status(200)
@@ -422,4 +430,55 @@ func (a *PublicApi) GetGame(c *gin.Context) {
 	time.Sleep(1 * time.Second)
 	response.OkWithDetailed(nil, "Success", c)
 
+}
+
+// GetMarket 根据类型获取市场配置列表（公开接口，无需认证）
+// @Tags     PublicApi
+// @Summary  Get market config list by type
+// @accept   application/json
+// @Produce  application/json
+// @Param    data body navRequest.GetMarketByTypeRequest true "Market type request parameters"
+// @Success  200  {object} response.Response{data=navResponse.PublicMarketListResponse} "Success"
+// @Router   /public/game/getMarket [post]
+func (a *PublicApi) GetMarket(c *gin.Context) {
+	var req navRequest.GetMarketByTypeRequest
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage("Invalid request parameters", c)
+		return
+	}
+
+	// 获取指定类型的可见市场配置
+	marketConfigs, err := navMarketConfigService.GetMarketConfigsByType(req.Type, 10)
+	if err != nil {
+		global.GVA_LOG.Error("获取市场配置列表失败!", zap.Error(err))
+		response.FailWithMessage("Failed to get market config list", c)
+		return
+	}
+
+	// 随机打乱数据
+	rand.Shuffle(len(marketConfigs), func(i, j int) {
+		marketConfigs[i], marketConfigs[j] = marketConfigs[j], marketConfigs[i]
+	})
+
+	// 转换为公开市场配置响应格式
+	var marketList []navResponse.PublicMarketItemResponse
+	for _, config := range marketConfigs {
+		marketList = append(marketList, navResponse.PublicMarketItemResponse{
+			ID:      config.ID,
+			Name:    config.Name,
+			Logo:    config.Logo,
+			JumpUrl: config.JumpUrl,
+		})
+	}
+
+	// 构建响应数据
+	marketResponse := navResponse.PublicMarketListResponse{
+		List:     marketList,
+		Total:    int64(len(marketList)),
+		Page:     1,
+		PageSize: len(marketList),
+	}
+
+	response.OkWithDetailed(marketResponse, "Success", c)
 }

@@ -191,6 +191,8 @@ system:
     use-strict-auth: false
     invite-base-url: ""
     http-proxy: http://127.0.0.1:7897
+    ip-db-path: "./resource/czdb/cz88_public_v4.czdb" # IP地址库路径
+
     env: dev
 tencent-cos:
     bucket: xxxxx-10005608

@@ -12,6 +12,7 @@ type RouterGroup struct {
 	PublicRouter
 	NavAccessStatsRouter
 	NavPlatformConfigRouter
+	NavMarketConfigRouter
 }
 
 var (
@@ -24,4 +25,5 @@ var (
 	publicApi            = api.ApiGroupApp.NavigationApiGroup.PublicApi
 	navAccessStatsApi    = api.ApiGroupApp.NavigationApiGroup.NavAccessStatsApi
 	navPlatformConfigApi = api.ApiGroupApp.NavigationApiGroup.NavPlatformConfigApi
+	navMarketConfigApi   = api.ApiGroupApp.NavigationApiGroup.NavMarketConfigApi
 )

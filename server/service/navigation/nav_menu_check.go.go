@@ -129,6 +129,20 @@ func (s *NavMenuCheckService) CheckAndCreateNavigationMenus() error {
 				Icon:  "platform",
 			},
 		},
+		// 市场配置子菜单
+		{
+			MenuLevel: 1,
+			Hidden:    false,
+			ParentId:  0, // 稍后会更新为实际的父菜单ID
+			Path:      "marketConfig",
+			Name:      "marketConfig",
+			Component: "view/navigation/marketConfig/marketConfig.vue",
+			Sort:      8,
+			Meta: system.Meta{
+				Title: "市场配置",
+				Icon:  "shopping",
+			},
+		},
 	}
 
 	// 检查并创建主菜单

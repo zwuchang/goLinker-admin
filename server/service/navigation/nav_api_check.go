@@ -234,6 +234,37 @@ func (s *NavApiCheckService) CheckAndCreateNavigationApis() error {
 			ApiGroup:    "导航管理",
 			Method:      "GET",
 		},
+		// 市场配置API
+		{
+			Path:        "/navigation/marketConfig/createMarketConfig",
+			Description: "创建市场配置",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/marketConfig/updateMarketConfig",
+			Description: "更新市场配置",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/marketConfig/deleteMarketConfig",
+			Description: "删除市场配置",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/marketConfig/getMarketConfigList",
+			Description: "获取市场配置列表",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/marketConfig/getMarketConfigById",
+			Description: "根据ID获取市场配置",
+			ApiGroup:    "导航管理",
+			Method:      "GET",
+		},
 	}
 
 	// 检查并创建每个API
