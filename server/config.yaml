@@ -112,10 +112,10 @@ mysql:
     prefix: ""
     port: "3306"
     config: charset=utf8mb4&parseTime=True&loc=Local
-    db-name: goLinker
-    username: root
+    db-name: 
+    username: 
     password: ""
-    path: 127.0.0.1
+    path: 
     engine: ""
     log-mode: error
     max-idle-conns: 10
@@ -190,7 +190,7 @@ system:
     use-mongo: false
     use-strict-auth: false
     invite-base-url: ""
-    http-proxy: http://127.0.0.1:7897
+    # http-proxy: http://127.0.0.1:7897
     ip-db-path: "./resource/czdb/cz88_public_v4.czdb" # IP地址库路径
 
     env: dev

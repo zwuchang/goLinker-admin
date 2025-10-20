@@ -23,13 +23,13 @@ FROM busybox AS prod
 
 COPY --from=ca /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-COPY --from=build /build/server /goLinker-admin/server
-COPY --from=build /build/config.yaml /goLinker-admin/config/config.yaml
-COPY --from=build /build/resource /goLinker-admin/resource
+COPY --from=build /build/server /linker-admin/server
+COPY --from=build /build/config.yaml /linker-admin/config/config.yaml
+COPY --from=build /build/resource /linker-admin/resource
 
 ENV STAGE=production
 
 EXPOSE 8888/tcp
 
-WORKDIR /goLinker-admin
-CMD ["/goLinker-admin/server","-c","/goLinker-admin/config/config.yaml"]
+WORKDIR /linker-admin
+CMD ["/linker-admin/server","-c","/linker-admin/config/config.yaml"]
