@@ -37,6 +37,7 @@ type NavGameUpdateRequest struct {
 	CategoryIds   *string `json:"category_ids" form:"category_ids"`     // 类别ID列表（可选）
 	Sticky        *int    `json:"sticky" form:"sticky"`                 // 置顶（可选）
 	Views         *int    `json:"views" form:"views"`                   // 浏览次数（可选）
+	DisplayTime   *string `json:"display_time" form:"display_time"`     // 显示时间（可选）
 	Description   *string `json:"description" form:"description"`       // 游戏描述（可选）
 	Content       *string `json:"content" form:"content"`               // 游戏内容（可选）
 	Status        *int    `json:"status" form:"status"`                 // 状态（可选）

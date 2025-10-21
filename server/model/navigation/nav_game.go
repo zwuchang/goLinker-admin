@@ -16,6 +16,7 @@ type NavGame struct {
 	CategoryIds   string `json:"category_ids" form:"category_ids" gorm:"comment:类别ID列表"`                 // 类别ID列表，JSON格式
 	Sticky        int    `json:"sticky" form:"sticky" gorm:"comment:置顶;default:0"`                       // 置顶 1:置顶 0:普通
 	Views         int    `json:"views" form:"views" gorm:"comment:浏览次数;default:0"`                       // 浏览次数
+	DisplayTime   string `json:"display_time" form:"display_time" gorm:"type:datetime;comment:显示时间"`     // 显示时间
 	Description   string `json:"description" form:"description" gorm:"comment:游戏描述"`                     // 游戏描述
 	Content       string `json:"content" form:"content" gorm:"comment:游戏内容"`                             // 游戏内容
 	Status        int    `json:"status" form:"status" gorm:"comment:状态;default:1"`                       // 状态 1:启用 0:禁用

@@ -152,6 +152,17 @@
         </el-table-column>
         <el-table-column
           align="left"
+          label="显示时间"
+          min-width="120"
+          prop="display_time"
+          sortable="custom"
+        >
+          <template #default="scope">
+            {{ formatDate(scope.row.display_time) }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="left"
           label="置顶"
           min-width="80"
           prop="sticky"
@@ -456,6 +467,7 @@ const sortChange = ({ prop, order }) => {
       'status': 'status',
       'is_visible': 'is_visible',
       'views': 'views',
+      'display_time': 'display_time',
       'display_name': 'display_name',
       'ad_name': 'ad_name',
       'CreatedAt': 'created_at'

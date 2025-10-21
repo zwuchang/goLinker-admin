@@ -63,6 +63,16 @@
         <el-form-item label="浏览次数" prop="views">
           <el-input-number v-model="form.views" :min="0" placeholder="请输入浏览次数" />
         </el-form-item>
+        <el-form-item label="显示时间" prop="display_time">
+          <el-date-picker
+            v-model="form.display_time"
+            type="datetime"
+            placeholder="请选择显示时间"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
+            style="width: 100%"
+          />
+        </el-form-item>
         <el-form-item label="置顶" prop="sticky">
           <el-radio-group v-model="form.sticky">
             <el-radio :label="1">是</el-radio>
@@ -131,7 +141,8 @@ const form = reactive({
   sticky: 0,
   is_visible: 1,
   status: 1,
-  views: 0
+  views: 0,
+  display_time: ''
 })
 
 // 选中的类别
@@ -222,7 +233,8 @@ const resetForm = () => {
     sticky: 0,
     is_visible: 1,
     status: 1,
-    views: 0
+    views: 0,
+    display_time: ''
   })
   selectedCategories.value = []
 }
