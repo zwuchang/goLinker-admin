@@ -475,8 +475,12 @@ func (a *PublicApi) GetMarket(c *gin.Context) {
 	case 3:
 		icon = gameConfigs[0].FloatingIcon3
 	}
-
+	// 总的启用状态
 	isEnable = gameConfigs[0].FloatingStatus == 1
+	// 如果悬浮图标地址为空，则不启用
+	if icon == "" {
+		isEnable = false
+	}
 
 	// 如果悬浮图标状态为关闭，则不返回市场配置
 	if !isEnable {
