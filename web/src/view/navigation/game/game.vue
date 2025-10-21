@@ -79,7 +79,7 @@
           prop="ID"
           sortable="custom"
         />
-        <el-table-column align="left" label="缩略图" prop="thumbnail" width="100">
+        <!-- <el-table-column align="left" label="缩略图" prop="thumbnail" width="100">
           <template #default="scope">
             <el-image
               v-if="scope.row.thumbnail"
@@ -89,7 +89,7 @@
             />
             <span v-else>-</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column align="left" label="游戏图标" prop="icon" width="100">
           <template #default="scope">
             <el-image

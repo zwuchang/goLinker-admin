@@ -175,6 +175,9 @@ func (s *NavGameService) UpdateGame(req request.NavGameUpdateRequest) (err error
 	if req.Views != nil {
 		updateFields["views"] = *req.Views
 	}
+	if req.DisplayTime != nil {
+		updateFields["display_time"] = *req.DisplayTime
+	}
 	if req.Description != nil {
 		updateFields["description"] = *req.Description
 	}

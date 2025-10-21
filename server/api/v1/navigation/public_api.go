@@ -142,12 +142,18 @@ func (a *PublicApi) GetGameList(c *gin.Context) {
 
 	var itemList []navResponse.PublicGameItemResponse
 	for _, game := range list {
+		var showDate string
+		if game.DisplayTime != "" {
+			showDate = game.DisplayTime
+		} else {
+			showDate = game.CreatedAt.Format("2006-01-02 15:04:05")
+		}
 		itemList = append(itemList, navResponse.PublicGameItemResponse{
 			ID:        game.ID,
 			Title:     game.Title,
 			Image:     game.Icon,
 			Views:     game.Views,
-			CreatedAt: game.CreatedAt.Format("2006-01-02 15:04:05"),
+			CreatedAt: showDate,
 		})
 	}
 

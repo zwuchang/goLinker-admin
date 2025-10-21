@@ -5,9 +5,9 @@
         <el-form-item label="游戏标题" prop="title">
           <el-input v-model="form.title" placeholder="请输入游戏标题" />
         </el-form-item>
-        <el-form-item label="缩略图" prop="thumbnail">
+        <!-- <el-form-item label="缩略图" prop="thumbnail">
           <el-input v-model="form.thumbnail" placeholder="请输入缩略图URL" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="游戏类别" prop="category_ids">
           <el-select v-model="selectedCategories" multiple placeholder="请选择游戏类别" style="width: 100%">
             <el-option
