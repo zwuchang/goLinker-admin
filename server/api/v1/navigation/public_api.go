@@ -448,8 +448,54 @@ func (a *PublicApi) GetMarket(c *gin.Context) {
 		return
 	}
 
+	gameConfigs, _, err := navGameConfigService.GetGameConfigList(navRequest.NavGameConfigSearch{
+		PageInfo: commonRequest.PageInfo{Page: 1, PageSize: 1},
+		NavGameConfig: navigation.NavGameConfig{
+			Status: 1, // 只获取启用的配置
+		},
+	})
+
+	if err != nil {
+		global.GVA_LOG.Error("获取游戏配置失败!", zap.Error(err))
+		response.FailWithMessage("Failed to get market config", c)
+		return
+	}
+
+	var (
+		marketLogo string
+		icon       string
+		isEnable   bool
+	)
+
+	switch req.Type {
+	case 1:
+		icon = gameConfigs[0].FloatingIcon1
+	case 2:
+		icon = gameConfigs[0].FloatingIcon2
+	case 3:
+		icon = gameConfigs[0].FloatingIcon3
+	}
+
+	isEnable = gameConfigs[0].FloatingStatus == 1
+
+	// 如果悬浮图标状态为关闭，则不返回市场配置
+	if !isEnable {
+		// 构建响应数据
+		marketResponse := navResponse.PublicMarketListResponse{
+			List:       make([]navResponse.PublicMarketItemResponse, 0),
+			MarketLogo: marketLogo,
+			Total:      0,
+			Page:       1,
+			PageSize:   0,
+		}
+
+		response.OkWithDetailed(marketResponse, "Success", c)
+		return
+	}
+
+	marketLogo = gameConfigs[0].MarketLogo
+
 	var marketList []navResponse.PublicMarketItemResponse
-	var marketLogo string
 
 	// 获取指定类型的可见市场配置（不管type为多少都查询市场配置）
 	marketConfigs, err := navMarketConfigService.GetMarketConfigsByType(req.Type, 10)
@@ -474,25 +520,13 @@ func (a *PublicApi) GetMarket(c *gin.Context) {
 		})
 	}
 
-	// 只有当type不为1时，才查询market_logo（只查询一次）
-	if req.Type != 1 {
-		gameConfigs, _, err := navGameConfigService.GetGameConfigList(navRequest.NavGameConfigSearch{
-			PageInfo: commonRequest.PageInfo{Page: 1, PageSize: 1},
-			NavGameConfig: navigation.NavGameConfig{
-				Status: 1, // 只获取启用的配置
-			},
-		})
-		if err == nil && len(gameConfigs) > 0 {
-			marketLogo = gameConfigs[0].MarketLogo
-		}
-	}
-
 	// 构建响应数据
 	marketResponse := navResponse.PublicMarketListResponse{
 		List:       marketList,
 		MarketLogo: marketLogo,
 		Total:      int64(len(marketList)),
 		Page:       1,
+		Icon:       icon,
 		PageSize:   len(marketList),
 	}
 

@@ -78,6 +78,40 @@
         />
         <el-table-column
           align="left"
+          label="悬浮图标状态"
+          min-width="120"
+          prop="floating_status"
+          sortable="custom"
+        >
+          <template #default="scope">
+            <el-tag :type="scope.row.floating_status === 1 ? 'success' : 'info'">
+              {{ scope.row.floating_status === 1 ? '开启' : '关闭' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="left"
+          label="悬浮1图标"
+          min-width="200"
+          prop="floating_icon1"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          align="left"
+          label="悬浮2图标"
+          min-width="200"
+          prop="floating_icon2"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          align="left"
+          label="悬浮3图标"
+          min-width="200"
+          prop="floating_icon3"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          align="left"
           label="状态"
           min-width="100"
           prop="status"

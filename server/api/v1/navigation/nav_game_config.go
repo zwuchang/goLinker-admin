@@ -5,7 +5,6 @@ import (
 	"goLinker-admin/server/model/common/response"
 	navRequest "goLinker-admin/server/model/navigation/request"
 	navResponse "goLinker-admin/server/model/navigation/response"
-	navService "goLinker-admin/server/service/navigation"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -40,7 +39,7 @@ func (api *NavGameConfigApi) CreateGameConfig(c *gin.Context) {
 		return
 	}
 
-	err = navService.ServiceGroupApp.NavGameConfigService.CreateGameConfig(gameConfig)
+	err = navGameConfigService.CreateGameConfig(gameConfig)
 	if err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
@@ -80,7 +79,7 @@ func (api *NavGameConfigApi) UpdateGameConfig(c *gin.Context) {
 		return
 	}
 
-	err = navService.ServiceGroupApp.NavGameConfigService.UpdateGameConfig(gameConfig)
+	err = navGameConfigService.UpdateGameConfig(gameConfig)
 	if err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
@@ -98,23 +97,27 @@ func (api *NavGameConfigApi) UpdateGameConfig(c *gin.Context) {
 // @Success  200  {object} response.Response{data=navResponse.NavGameConfigResponse,msg=string} "获取成功"
 // @Router   /navigation/gameConfig/getGameConfig [get]
 func (api *NavGameConfigApi) GetGameConfig(c *gin.Context) {
-	gameConfig, err := navService.ServiceGroupApp.NavGameConfigService.GetGameConfig()
+	gameConfig, err := navGameConfigService.GetGameConfig()
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 	} else {
 		responseData := navResponse.NavGameConfigResponse{
-			ID:           gameConfig.ID,
-			DownloadUrl:  gameConfig.DownloadUrl,
-			AudioUrl:     gameConfig.AudioUrl,
-			WebsiteTitle: gameConfig.WebsiteTitle,
-			WebsiteDesc:  gameConfig.WebsiteDesc,
-			WebsiteIcon:  gameConfig.WebsiteIcon,
-			WebsiteLogo:  gameConfig.WebsiteLogo,
-			MarketLogo:   gameConfig.MarketLogo,
-			Status:       gameConfig.Status,
-			CreatedAt:    gameConfig.CreatedAt.Format("2006-01-02 15:04:05"),
-			UpdatedAt:    gameConfig.UpdatedAt.Format("2006-01-02 15:04:05"),
+			ID:             gameConfig.ID,
+			DownloadUrl:    gameConfig.DownloadUrl,
+			AudioUrl:       gameConfig.AudioUrl,
+			WebsiteTitle:   gameConfig.WebsiteTitle,
+			WebsiteDesc:    gameConfig.WebsiteDesc,
+			WebsiteIcon:    gameConfig.WebsiteIcon,
+			WebsiteLogo:    gameConfig.WebsiteLogo,
+			MarketLogo:     gameConfig.MarketLogo,
+			FloatingStatus: gameConfig.FloatingStatus,
+			FloatingIcon1:  gameConfig.FloatingIcon1,
+			FloatingIcon2:  gameConfig.FloatingIcon2,
+			FloatingIcon3:  gameConfig.FloatingIcon3,
+			Status:         gameConfig.Status,
+			CreatedAt:      gameConfig.CreatedAt.Format("2006-01-02 15:04:05"),
+			UpdatedAt:      gameConfig.UpdatedAt.Format("2006-01-02 15:04:05"),
 		}
 		response.OkWithDetailed(responseData, "获取成功", c)
 	}
@@ -137,7 +140,7 @@ func (api *NavGameConfigApi) GetGameConfigList(c *gin.Context) {
 		return
 	}
 
-	list, total, err := navService.ServiceGroupApp.NavGameConfigService.GetGameConfigList(pageInfo)
+	list, total, err := navGameConfigService.GetGameConfigList(pageInfo)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)

@@ -30,14 +30,18 @@ func (navGameConfigService *NavGameConfigService) CreateGameConfig(gameConfig na
 
 	// 创建游戏配置
 	newGameConfig := navigation.NavGameConfig{
-		DownloadUrl:  gameConfig.DownloadUrl,
-		AudioUrl:     gameConfig.AudioUrl,
-		WebsiteTitle: gameConfig.WebsiteTitle,
-		WebsiteDesc:  gameConfig.WebsiteDesc,
-		WebsiteIcon:  gameConfig.WebsiteIcon,
-		WebsiteLogo:  gameConfig.WebsiteLogo,
-		MarketLogo:   gameConfig.MarketLogo,
-		Status:       gameConfig.Status,
+		DownloadUrl:    gameConfig.DownloadUrl,
+		AudioUrl:       gameConfig.AudioUrl,
+		WebsiteTitle:   gameConfig.WebsiteTitle,
+		WebsiteDesc:    gameConfig.WebsiteDesc,
+		WebsiteIcon:    gameConfig.WebsiteIcon,
+		WebsiteLogo:    gameConfig.WebsiteLogo,
+		MarketLogo:     gameConfig.MarketLogo,
+		FloatingStatus: gameConfig.FloatingStatus,
+		FloatingIcon1:  gameConfig.FloatingIcon1,
+		FloatingIcon2:  gameConfig.FloatingIcon2,
+		FloatingIcon3:  gameConfig.FloatingIcon3,
+		Status:         gameConfig.Status,
 	}
 
 	if newGameConfig.Status == 0 {
@@ -70,14 +74,18 @@ func (navGameConfigService *NavGameConfigService) UpdateGameConfig(gameConfig na
 
 	// 更新配置
 	updateData := map[string]interface{}{
-		"download_url":  gameConfig.DownloadUrl,
-		"audio_url":     gameConfig.AudioUrl,
-		"website_title": gameConfig.WebsiteTitle,
-		"website_desc":  gameConfig.WebsiteDesc,
-		"website_icon":  gameConfig.WebsiteIcon,
-		"website_logo":  gameConfig.WebsiteLogo,
-		"market_logo":   gameConfig.MarketLogo,
-		"status":        gameConfig.Status,
+		"download_url":    gameConfig.DownloadUrl,
+		"audio_url":       gameConfig.AudioUrl,
+		"website_title":   gameConfig.WebsiteTitle,
+		"website_desc":    gameConfig.WebsiteDesc,
+		"website_icon":    gameConfig.WebsiteIcon,
+		"website_logo":    gameConfig.WebsiteLogo,
+		"market_logo":     gameConfig.MarketLogo,
+		"floating_status": gameConfig.FloatingStatus,
+		"floating_icon1":  gameConfig.FloatingIcon1,
+		"floating_icon2":  gameConfig.FloatingIcon2,
+		"floating_icon3":  gameConfig.FloatingIcon3,
+		"status":          gameConfig.Status,
 	}
 
 	err = global.GVA_DB.Model(&existingConfig).Updates(updateData).Error

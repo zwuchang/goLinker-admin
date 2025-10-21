@@ -35,6 +35,7 @@ type PublicMarketItemResponse struct {
 type PublicMarketListResponse struct {
 	List       []PublicMarketItemResponse `json:"list"`
 	MarketLogo string                     `json:"market_logo"`
+	Icon       string                     `json:"icon"`
 
 	Total    int64 `json:"-"`
 	Page     int   `json:"-"`

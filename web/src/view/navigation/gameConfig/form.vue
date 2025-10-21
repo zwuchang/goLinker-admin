@@ -1,7 +1,7 @@
 <template>
   <div class="gva-table-box">
     <div class="gva-form-box">
-      <el-form ref="gameConfigFormRef" :model="form" label-width="100px">
+      <el-form ref="gameConfigFormRef" :model="form" label-width="120px">
         <el-form-item label="下载地址" prop="download_url">
           <el-input v-model="form.download_url" placeholder="请输入下载地址" />
         </el-form-item>
@@ -15,13 +15,46 @@
           <el-input v-model="form.website_desc" type="textarea" placeholder="请输入网站描述" />
         </el-form-item>
         <el-form-item label="网站图标" prop="website_icon">
-          <el-input v-model="form.website_icon" placeholder="请输入网站图标URL" />
+          <div class="icon-input-container">
+            <el-input v-model="form.website_icon" placeholder="请输入网站图标URL" />
+            <img v-if="form.website_icon" :src="form.website_icon" class="icon-preview" @error="handleImageError" />
+          </div>
         </el-form-item>
         <el-form-item label="网站Logo" prop="website_logo">
-          <el-input v-model="form.website_logo" placeholder="请输入网站Logo URL" />
+          <div class="icon-input-container">
+            <el-input v-model="form.website_logo" placeholder="请输入网站Logo URL" />
+            <img v-if="form.website_logo" :src="form.website_logo" class="icon-preview" @error="handleImageError" />
+          </div>
         </el-form-item>
         <el-form-item label="市场Logo" prop="market_logo">
-          <el-input v-model="form.market_logo" placeholder="请输入市场Logo URL" />
+          <div class="icon-input-container">
+            <el-input v-model="form.market_logo" placeholder="请输入市场Logo URL" />
+            <img v-if="form.market_logo" :src="form.market_logo" class="icon-preview" @error="handleImageError" />
+          </div>
+        </el-form-item>
+        <el-form-item label="悬浮图标状态" prop="floating_status">
+          <el-radio-group v-model="form.floating_status">
+            <el-radio :label="1">开启</el-radio>
+            <el-radio :label="0">关闭</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="悬浮1图标地址" prop="floating_icon1">
+          <div class="icon-input-container">
+            <el-input v-model="form.floating_icon1" placeholder="请输入悬浮1图标地址" />
+            <img v-if="form.floating_icon1" :src="form.floating_icon1" class="icon-preview" @error="handleImageError" />
+          </div>
+        </el-form-item>
+        <el-form-item label="悬浮2图标地址" prop="floating_icon2">
+          <div class="icon-input-container">
+            <el-input v-model="form.floating_icon2" placeholder="请输入悬浮2图标地址" />
+            <img v-if="form.floating_icon2" :src="form.floating_icon2" class="icon-preview" @error="handleImageError" />
+          </div>
+        </el-form-item>
+        <el-form-item label="悬浮3图标地址" prop="floating_icon3">
+          <div class="icon-input-container">
+            <el-input v-model="form.floating_icon3" placeholder="请输入悬浮3图标地址" />
+            <img v-if="form.floating_icon3" :src="form.floating_icon3" class="icon-preview" @error="handleImageError" />
+          </div>
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
@@ -66,6 +99,10 @@ const form = reactive({
   website_icon: '',
   website_logo: '',
   market_logo: '',
+  floating_status: 0,
+  floating_icon1: '',
+  floating_icon2: '',
+  floating_icon3: '',
   status: 1
 })
 
@@ -110,6 +147,10 @@ const resetForm = () => {
     website_icon: '',
     website_logo: '',
     market_logo: '',
+    floating_status: 0,
+    floating_icon1: '',
+    floating_icon2: '',
+    floating_icon3: '',
     status: 1
   })
 }
@@ -120,6 +161,11 @@ watch(() => props.id, (newId) => {
     resetForm()
   }
 })
+
+// 处理图片加载错误
+const handleImageError = (event) => {
+  event.target.style.display = 'none'
+}
 </script>
 
 <style scoped>
@@ -130,5 +176,25 @@ watch(() => props.id, (newId) => {
 .gva-form-box {
   max-width: 800px;
   margin: 0 auto;
+}
+
+.icon-input-container {
+  width:100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-input-container .el-input {
+  flex: 1;
+}
+
+.icon-preview {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+  flex-shrink: 0;
 }
 </style>
