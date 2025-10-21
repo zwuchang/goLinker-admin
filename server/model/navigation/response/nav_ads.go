@@ -16,3 +16,4 @@ type NavAdsListResponse struct {
 	PageSize int                  `json:"pageSize"` // 每页数量
 }
 
+

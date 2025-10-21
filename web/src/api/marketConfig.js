@@ -102,3 +102,4 @@ export const getMarketByType = (data) => {
     data
   })
 }
+

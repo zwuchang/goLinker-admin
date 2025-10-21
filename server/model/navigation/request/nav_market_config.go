@@ -38,3 +38,4 @@ type DeleteMarketConfig struct {
 type GetMarketByTypeRequest struct {
 	Type int `json:"type" form:"type" binding:"required,min=1,max=3"`
 }
+

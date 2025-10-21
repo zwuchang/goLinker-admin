@@ -50,3 +50,4 @@ type DeleteNavPlatformConfigRequest struct {
 type NavPlatformConfig struct {
 	navigation.NavPlatformConfig
 }
+

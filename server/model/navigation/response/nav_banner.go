@@ -17,3 +17,4 @@ type NavBannerListResponse struct {
 	PageSize int                    `json:"pageSize"`
 }
 
+

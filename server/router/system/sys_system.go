@@ -1,6 +1,7 @@
 package system
 
 import (
+	"goLinker-admin/server/global"
 	"goLinker-admin/server/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -18,6 +19,8 @@ func (s *SysRouter) InitSystemRouter(Router *gin.RouterGroup) {
 	}
 	{
 		sysRouterWithoutRecord.POST("getSystemConfig", systemApi.GetSystemConfig) // 获取配置文件内容
-		sysRouterWithoutRecord.POST("getServerInfo", systemApi.GetServerInfo)     // 获取服务器信息
+		if global.GVA_CONFIG.System.Env == "dev" {
+			sysRouterWithoutRecord.POST("getServerInfo", systemApi.GetServerInfo) // 获取服务器信息
+		}
 	}
 }

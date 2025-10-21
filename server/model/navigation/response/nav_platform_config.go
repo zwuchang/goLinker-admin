@@ -20,3 +20,4 @@ type PublicPlatformMenuResponse struct {
 	PlatformName string `json:"platform_name"` // 平台名称
 	PlatformIcon string `json:"platform_icon"` // 平台图标地址
 }
+

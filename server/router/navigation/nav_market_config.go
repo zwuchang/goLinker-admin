@@ -24,3 +24,4 @@ func (s *NavMarketConfigRouter) InitNavMarketConfigRouter(Router *gin.RouterGrou
 		navMarketConfigRouterWithoutRecord.GET("getMarketConfigById/:id", navMarketConfigApi.GetMarketConfigById) // 根据ID获取市场配置
 	}
 }
+
