@@ -55,10 +55,10 @@
 
 ### 构建
 ```
-docker build . -t r2-registry-production.burp-works.workers.dev/goLinker-admin
+docker build . -t r2-registry-production.burp-works.workers.dev/linker-admin
 ```
 
 ### 推送
 ```
-docker push  r2-registry-production.burp-works.workers.dev/goLinker-admin
+docker push  r2-registry-production.burp-works.workers.dev/linker-admin
 ```

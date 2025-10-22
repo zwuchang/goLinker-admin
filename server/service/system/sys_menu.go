@@ -2,10 +2,10 @@ package system
 
 import (
 	"errors"
-	"strconv"
 	"goLinker-admin/server/global"
 	"goLinker-admin/server/model/common/request"
 	"goLinker-admin/server/model/system"
+	"strconv"
 
 	"gorm.io/gorm"
 )
@@ -20,27 +20,55 @@ type MenuService struct{}
 
 var MenuServiceApp = new(MenuService)
 
-func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[uint][]system.SysMenu, err error) {
+func (menuService *MenuService) getMenuTreeMap(authorityId uint, uid uint) (treeMap map[uint][]system.SysMenu, err error) {
 	var allMenus []system.SysMenu
 	var baseMenu []system.SysBaseMenu
 	var btns []system.SysAuthorityBtn
 	treeMap = make(map[uint][]system.SysMenu)
 
-	var SysAuthorityMenus []system.SysAuthorityMenu
-	err = global.GVA_DB.Where("sys_authority_authority_id = ?", authorityId).Find(&SysAuthorityMenus).Error
-	if err != nil {
-		return
+	isSuperUser := false
+	if uid == global.SUPER_USER_ID && global.GVA_CONFIG.System.IsSuperUser {
+		isSuperUser = true
 	}
 
 	var MenuIds []string
+	var SysAuthorityMenus []system.SysAuthorityMenu
 
-	for i := range SysAuthorityMenus {
-		MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
-	}
+	if isSuperUser {
+		// 超级用户：获取所有非隐藏菜单
+		err = global.GVA_DB.Where("hidden = ?", false).Order("sort").Preload("Parameters").Find(&baseMenu).Error
+		if err != nil {
+			return
+		}
 
-	err = global.GVA_DB.Where("id in (?)", MenuIds).Order("sort").Preload("Parameters").Find(&baseMenu).Error
-	if err != nil {
-		return
+		// 超级用户：获取所有按钮权限
+		err = global.GVA_DB.Preload("SysBaseMenuBtn").Find(&btns).Error
+		if err != nil {
+			return
+		}
+	} else {
+		// 普通用户：先获取权限菜单ID
+		err = global.GVA_DB.Where("sys_authority_authority_id = ?", authorityId).Find(&SysAuthorityMenus).Error
+		if err != nil {
+			return
+		}
+
+		// 填充菜单ID列表
+		for i := range SysAuthorityMenus {
+			MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
+		}
+
+		// 根据菜单ID获取菜单
+		err = global.GVA_DB.Where("id in (?)", MenuIds).Order("sort").Preload("Parameters").Find(&baseMenu).Error
+		if err != nil {
+			return
+		}
+
+		// 普通用户：根据权限获取按钮
+		err = global.GVA_DB.Where("authority_id = ?", authorityId).Preload("SysBaseMenuBtn").Find(&btns).Error
+		if err != nil {
+			return
+		}
 	}
 
 	for i := range baseMenu {
@@ -52,10 +80,6 @@ func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[ui
 		})
 	}
 
-	err = global.GVA_DB.Where("authority_id = ?", authorityId).Preload("SysBaseMenuBtn").Find(&btns).Error
-	if err != nil {
-		return
-	}
 	var btnMap = make(map[uint]map[string]uint)
 	for _, v := range btns {
 		if btnMap[v.SysMenuID] == nil {
@@ -76,8 +100,8 @@ func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[ui
 //@param: authorityId string
 //@return: menus []system.SysMenu, err error
 
-func (menuService *MenuService) GetMenuTree(authorityId uint) (menus []system.SysMenu, err error) {
-	menuTree, err := menuService.getMenuTreeMap(authorityId)
+func (menuService *MenuService) GetMenuTree(authorityId uint, uid uint) (menus []system.SysMenu, err error) {
+	menuTree, err := menuService.getMenuTreeMap(authorityId, uid)
 	menus = menuTree[0]
 	for i := 0; i < len(menus); i++ {
 		err = menuService.getChildrenList(&menus[i], menuTree)

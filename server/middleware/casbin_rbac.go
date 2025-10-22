@@ -32,6 +32,13 @@ func CasbinHandler() gin.HandlerFunc {
 			return
 		}
 
+		// 如果开启了1号超级用户，则跳过权限验证
+		if global.GVA_CONFIG.System.IsSuperUser && waitUse.BaseClaims.ID == global.SUPER_USER_ID {
+			global.GVA_LOG.Debug("1号超级用户，跳过权限验证", zap.String("path", path), zap.String("method", act))
+			c.Next()
+			return
+		}
+
 		success, err := e.Enforce(sub, obj, act)
 		if err != nil {
 			global.GVA_LOG.Error("权限验证失败", zap.Error(err))

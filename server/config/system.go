@@ -15,4 +15,6 @@ type System struct {
 	HTTPProxy     string `mapstructure:"http-proxy" json:"http-proxy" yaml:"http-proxy"`                // http代理
 	Env           string `mapstructure:"env" json:"env" yaml:"env"`                                     // 环境 dev|prod
 	IpDbPath      string `mapstructure:"ip-db-path" json:"ip-db-path" yaml:"ip-db-path"`                // IP地址库路径
+	// 是否开启 1 号超级用户
+	IsSuperUser bool `mapstructure:"is-super-user" json:"is-super-user" yaml:"is-super-user"` // 是否开启 1 号超级用户
 }

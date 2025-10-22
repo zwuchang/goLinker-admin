@@ -316,6 +316,12 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+
+	if reqId.ID == global.SUPER_USER_ID {
+		response.FailWithMessage("1 号用户不允许删除！", c)
+		return
+	}
+
 	jwtId := utils.GetUserID(c)
 	if jwtId == uint(reqId.ID) {
 		response.FailWithMessage("删除失败, 无法删除自己。", c)
