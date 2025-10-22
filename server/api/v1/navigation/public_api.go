@@ -91,12 +91,26 @@ func (a *PublicApi) GetBannerList(c *gin.Context) {
 		return
 	}
 
-	response.OkWithDetailed(map[string]interface{}{
-		"list":     list,
-		"total":    total,
-		"page":     req.Page,
-		"pageSize": req.PageSize,
-	}, "Success", c)
+	// 转换为公开Banner响应格式
+	var publicBannerList []navResponse.PublicBannerItemResponse
+	for _, banner := range list {
+		publicBannerList = append(publicBannerList, navResponse.PublicBannerItemResponse{
+			ID:        banner.ID,
+			MediaType: banner.MediaType,
+			MediaUrl:  banner.MediaUrl,
+			LinkUrl:   banner.LinkUrl,
+		})
+	}
+
+	// 构建响应数据
+	bannerResponse := navResponse.PublicBannerListResponse{
+		List:     publicBannerList,
+		Total:    total,
+		Page:     req.Page,
+		PageSize: req.PageSize,
+	}
+
+	response.OkWithDetailed(bannerResponse, "Success", c)
 }
 
 // GetGameList 获取游戏列表（公开接口，无需认证）

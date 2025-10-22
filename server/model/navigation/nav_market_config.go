@@ -22,3 +22,4 @@ func (NavMarketConfig) TableName() string {
 	return "nav_market_configs"
 }
 
+

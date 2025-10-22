@@ -25,3 +25,4 @@ func (s *NavMarketConfigRouter) InitNavMarketConfigRouter(Router *gin.RouterGrou
 	}
 }
 
+
