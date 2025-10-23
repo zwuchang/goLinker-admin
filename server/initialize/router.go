@@ -73,7 +73,7 @@ func Routers() *gin.Engine {
 	{
 		// 健康监测
 		PublicGroup.GET("/health", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{"message": "ok", "version": "20251009"})
+			c.JSON(http.StatusOK, gin.H{"message": "ok", "version": "20251022"})
 		})
 	}
 	{
@@ -106,6 +106,7 @@ func Routers() *gin.Engine {
 		navigationRouter.InitAccessStatsRouter(PrivateGroup)                // 导航-访问统计
 		navigationRouter.InitNavPlatformConfigRouter(PrivateGroup)          // 导航-平台游戏配置
 		navigationRouter.InitNavMarketConfigRouter(PrivateGroup)            // 导航-市场配置
+		navigationRouter.InitNavPlatformRankingRouter(PrivateGroup)         // 导航-平台排行榜
 		navigationRouter.InitPublicRouter(PublicGroup)                      // 公开接口（无需认证）
 		exampleRouter.InitCustomerRouter(PrivateGroup)                      // 客户路由
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)         // 文件上传下载功能路由

@@ -23,3 +23,4 @@ func (NavMarketConfig) TableName() string {
 }
 
 
+

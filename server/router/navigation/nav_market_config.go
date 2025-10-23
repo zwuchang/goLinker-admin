@@ -1,7 +1,6 @@
 package navigation
 
 import (
-	v1 "goLinker-admin/server/api/v1"
 	"goLinker-admin/server/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +12,6 @@ type NavMarketConfigRouter struct{}
 func (s *NavMarketConfigRouter) InitNavMarketConfigRouter(Router *gin.RouterGroup) {
 	navMarketConfigRouter := Router.Group("navigation/marketConfig").Use(middleware.OperationRecord())
 	navMarketConfigRouterWithoutRecord := Router.Group("navigation/marketConfig")
-	var navMarketConfigApi = v1.ApiGroupApp.NavigationApiGroup.NavMarketConfigApi
 	{
 		navMarketConfigRouter.POST("createMarketConfig", navMarketConfigApi.CreateMarketConfig) // 创建市场配置
 		navMarketConfigRouter.POST("updateMarketConfig", navMarketConfigApi.UpdateMarketConfig) // 更新市场配置
@@ -24,5 +22,3 @@ func (s *NavMarketConfigRouter) InitNavMarketConfigRouter(Router *gin.RouterGrou
 		navMarketConfigRouterWithoutRecord.GET("getMarketConfigById/:id", navMarketConfigApi.GetMarketConfigById) // 根据ID获取市场配置
 	}
 }
-
-

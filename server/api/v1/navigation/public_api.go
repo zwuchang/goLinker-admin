@@ -556,3 +556,46 @@ func (a *PublicApi) GetMarket(c *gin.Context) {
 
 	response.OkWithDetailed(marketResponse, "Success", c)
 }
+
+// GetPlatformRanking 获取平台排行榜列表（公开接口，无需认证）
+// @Tags     PublicApi
+// @Summary  Get platform ranking list
+// @accept   application/json
+// @Produce  application/json
+// @Success  200  {object} response.Response{data=navResponse.PublicPlatformRankingListResponse} "Success"
+// @Router   /public/ranking/platforms [post]
+func (a *PublicApi) GetPlatformRanking(c *gin.Context) {
+	// 获取可见的平台排行榜列表
+	list, err := navPlatformRankingService.GetVisiblePlatformRankings(10)
+	if err != nil {
+		global.GVA_LOG.Error("获取平台排行榜列表失败!", zap.Error(err))
+		response.FailWithMessage("Failed to get platform ranking list", c)
+		return
+	}
+
+	// 转换为公开平台排行榜响应格式
+	var rankingList []navResponse.PublicPlatformRankingItemResponse
+	for _, ranking := range list {
+		rankingList = append(rankingList, navResponse.PublicPlatformRankingItemResponse{
+			ID:           ranking.ID,
+			Rank:         ranking.Rank,
+			PlatformName: ranking.PlatformName,
+			Logo:         ranking.Logo,
+			Rating:       ranking.Rating,
+			Features:     ranking.Features,
+			FeatureType:  ranking.FeatureType,
+			VisitUrl:     ranking.VisitUrl,
+			IsNew:        ranking.IsNew,
+		})
+	}
+
+	// 构建响应数据
+	rankingResponse := navResponse.PublicPlatformRankingListResponse{
+		List:     rankingList,
+		Total:    int64(len(rankingList)),
+		Page:     1,
+		PageSize: len(rankingList),
+	}
+
+	response.OkWithDetailed(rankingResponse, "Success", c)
+}

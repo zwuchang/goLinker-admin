@@ -265,6 +265,37 @@ func (s *NavApiCheckService) CheckAndCreateNavigationApis() error {
 			ApiGroup:    "导航管理",
 			Method:      "GET",
 		},
+		// 平台排行榜API
+		{
+			Path:        "/navigation/platformRanking/createPlatformRanking",
+			Description: "创建平台排行榜",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/platformRanking/updatePlatformRanking",
+			Description: "更新平台排行榜",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/platformRanking/deletePlatformRanking",
+			Description: "删除平台排行榜",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/platformRanking/getPlatformRankingList",
+			Description: "获取平台排行榜列表",
+			ApiGroup:    "导航管理",
+			Method:      "GET",
+		},
+		{
+			Path:        "/navigation/platformRanking/findPlatformRanking",
+			Description: "根据ID获取平台排行榜",
+			ApiGroup:    "导航管理",
+			Method:      "GET",
+		},
 	}
 
 	// 检查并创建每个API
@@ -346,6 +377,12 @@ func (s *NavApiCheckService) CheckNavigationApisExist() bool {
 		{"/navigation/gameConfig/getGameConfig", "GET"},
 		{"/navigation/banner/getBannerList", "POST"},
 		{"/navigation/banner/createBanner", "POST"},
+		{"/navigation/platformConfig/createPlatformConfig", "POST"},
+		{"/navigation/platformConfig/getPlatformConfigList", "POST"},
+		{"/navigation/marketConfig/createMarketConfig", "POST"},
+		{"/navigation/marketConfig/getMarketConfigList", "POST"},
+		{"/navigation/platformRanking/createPlatformRanking", "POST"},
+		{"/navigation/platformRanking/getPlatformRankingList", "GET"},
 	}
 
 	for _, api := range keyApis {
@@ -399,6 +436,21 @@ func (s *NavApiCheckService) GetNavigationApiStatus() map[string]interface{} {
 		{"/navigation/banner/createBanner", "POST", "创建Banner"},
 		{"/navigation/banner/updateBanner", "POST", "更新Banner"},
 		{"/navigation/banner/deleteBanner", "DELETE", "删除Banner"},
+		{"/navigation/platformConfig/createPlatformConfig", "POST", "创建平台游戏配置"},
+		{"/navigation/platformConfig/updatePlatformConfig", "POST", "更新平台游戏配置"},
+		{"/navigation/platformConfig/deletePlatformConfig", "POST", "删除平台游戏配置"},
+		{"/navigation/platformConfig/getPlatformConfigList", "POST", "获取平台游戏配置列表"},
+		{"/navigation/platformConfig/getPlatformConfigById", "GET", "根据ID获取平台游戏配置"},
+		{"/navigation/marketConfig/createMarketConfig", "POST", "创建市场配置"},
+		{"/navigation/marketConfig/updateMarketConfig", "POST", "更新市场配置"},
+		{"/navigation/marketConfig/deleteMarketConfig", "POST", "删除市场配置"},
+		{"/navigation/marketConfig/getMarketConfigList", "POST", "获取市场配置列表"},
+		{"/navigation/marketConfig/getMarketConfigById", "GET", "根据ID获取市场配置"},
+		{"/navigation/platformRanking/createPlatformRanking", "POST", "创建平台排行榜"},
+		{"/navigation/platformRanking/updatePlatformRanking", "POST", "更新平台排行榜"},
+		{"/navigation/platformRanking/deletePlatformRanking", "POST", "删除平台排行榜"},
+		{"/navigation/platformRanking/getPlatformRankingList", "GET", "获取平台排行榜列表"},
+		{"/navigation/platformRanking/findPlatformRanking", "GET", "根据ID获取平台排行榜"},
 	}
 
 	apiStatus := make(map[string]bool)

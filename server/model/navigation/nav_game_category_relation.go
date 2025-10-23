@@ -18,3 +18,4 @@ func (NavGameCategoryRelation) TableName() string {
 
 
 
+
