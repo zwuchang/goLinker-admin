@@ -248,7 +248,7 @@ const loading = ref(false)
 const refreshTimer = ref(null)
 
 // 时间查询相关
-const timeRange = ref('yesterday') // 默认昨天
+const timeRange = ref('today') // 默认昨天
 const customDateRange = ref([])
 const currentTimeRange = ref({
   startTime: '',
@@ -412,7 +412,7 @@ const refreshRecentAccess = () => {
 // 生命周期钩子
 onMounted(() => {
   // 初始化时间范围为昨天
-  currentTimeRange.value = getTimeRange('yesterday')
+  currentTimeRange.value = getTimeRange('today')
   loadData()
   
   // 每30秒自动刷新数据
