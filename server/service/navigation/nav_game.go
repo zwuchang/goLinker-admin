@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -60,6 +61,10 @@ func (s *NavGameService) CreateGame(game navigation.NavGame) (err error) {
 		return err
 	}
 	game.CategoryIds = sortedCategoryIds
+
+	if game.DisplayTime == "" {
+		game.DisplayTime = time.Now().Format("2006-01-02 15:04:05")
+	}
 
 	// 创建游戏
 	err = global.GVA_DB.Create(&game).Error
@@ -175,7 +180,7 @@ func (s *NavGameService) UpdateGame(req request.NavGameUpdateRequest) (err error
 	if req.Views != nil {
 		updateFields["views"] = *req.Views
 	}
-	if req.DisplayTime != nil {
+	if req.DisplayTime != nil && *req.DisplayTime != "" {
 		updateFields["display_time"] = *req.DisplayTime
 	}
 	if req.Description != nil {

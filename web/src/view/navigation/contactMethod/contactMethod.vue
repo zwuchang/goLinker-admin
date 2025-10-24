@@ -1,48 +1,73 @@
 <template>
   <div>
+    <div class="gva-search-box">
+      <el-form ref="searchForm" :inline="true" :model="searchInfo">
+        <el-form-item label="显示名称">
+          <el-input v-model="searchInfo.displayName" placeholder="显示名称" />
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="searchInfo.status" clearable placeholder="请选择">
+            <el-option label="启用" :value="1" />
+            <el-option label="禁用" :value="0" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="search" @click="onSubmit">
+            查询
+          </el-button>
+          <el-button icon="refresh" @click="onReset"> 重置 </el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" icon="plus" @click="openDrawer">
-          新增联系方式
+        <el-button type="primary" icon="plus" @click="openDialog">
+          新增
+        </el-button>
+        <el-button icon="delete" :disabled="!multipleSelection.length" @click="onDelete">
+          删除
         </el-button>
       </div>
       <el-table
-        ref="multipleTable"
         :data="tableData"
-        style="width: 100%"
-        tooltip-effect="dark"
-        row-key="ID"
+        @sort-change="sortChange"
+        @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="创建时间" width="180">
-          <template #default="scope">
-            <span>{{ formatDate(scope.row.CreatedAt) }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column
+          align="left"
+          label="id"
+          min-width="60"
+          prop="ID"
+          sortable="custom"
+        />
         <el-table-column
           align="left"
           label="显示名称"
+          min-width="120"
           prop="displayName"
-          width="120"
+          sortable="custom"
         />
         <el-table-column
           align="left"
           label="跳转地址"
+          min-width="200"
           prop="jumpUrl"
-          width="200"
           show-overflow-tooltip
         />
         <el-table-column
           align="left"
           label="排序"
+          min-width="80"
           prop="sort"
-          width="80"
+          sortable="custom"
         />
         <el-table-column
           align="left"
           label="状态"
+          min-width="100"
           prop="status"
-          width="80"
+          sortable="custom"
         >
           <template #default="scope">
             <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">
@@ -50,20 +75,32 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="操作" min-width="160">
+        <el-table-column
+          align="left"
+          label="创建时间"
+          min-width="180"
+          prop="CreatedAt"
+          sortable="custom"
+        >
+          <template #default="scope">
+            {{ formatDate(scope.row.CreatedAt) }}
+          </template>
+        </el-table-column>
+
+        <el-table-column align="left" fixed="right" label="操作" :min-width="appStore.operateMinWith">
           <template #default="scope">
             <el-button
+              icon="edit"
               type="primary"
               link
-              icon="edit"
               @click="editContactMethod(scope.row)"
             >
               编辑
             </el-button>
             <el-button
+              icon="delete"
               type="primary"
               link
-              icon="delete"
               @click="removeContactMethod(scope.row)"
             >
               删除
@@ -84,48 +121,15 @@
       </div>
     </div>
     
-    <!-- 编辑抽屉 -->
-    <el-drawer
-      v-model="drawerFormVisible"
-      :before-close="closeDrawer"
-      :show-close="false"
-      size="50%"
-    >
-      <template #header>
-        <div class="flex justify-between items-center">
-          <span class="text-lg">{{ type === 'create' ? '新增' : '编辑' }}联系方式</span>
-          <div>
-            <el-button @click="closeDrawer">取 消</el-button>
-            <el-button type="primary" @click="enterDrawer" :loading="loading">确 定</el-button>
-          </div>
-        </div>
-      </template>
-      
-      <el-form :model="form" label-width="120px" :rules="rules" ref="formRef">
-        <el-form-item label="显示名称" prop="displayName">
-          <el-input v-model="form.displayName" placeholder="如：Twitter、Facebook、微信等" />
-        </el-form-item>
-        
-        <el-form-item label="跳转地址" prop="jumpUrl">
-          <el-input v-model="form.jumpUrl" placeholder="请输入跳转地址" />
-        </el-form-item>
-        
-        <el-form-item label="联系方式图标">
-          <el-input v-model="form.image" placeholder="请输入联系方式图标" />
-        </el-form-item>
-        
-        <el-form-item label="排序">
-          <el-input-number v-model="form.sort" :min="0" :max="999" />
-        </el-form-item>
-        
-        <el-form-item label="状态">
-          <el-radio-group v-model="form.status">
-            <el-radio :label="1">启用</el-radio>
-            <el-radio :label="0">禁用</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-    </el-drawer>
+    <!-- 表单弹窗 -->
+    <el-dialog v-model="dialogFormVisible" :title="dialogTitle" width="800px" destroy-on-close>
+      <ContactMethodForm
+        :id="formId"
+        :edit-data="editData"
+        @close="dialogFormVisible = false"
+        @success="getTableData"
+      />
+    </el-dialog>
   </div>
 </template>
 
@@ -137,13 +141,22 @@ import {
   getContactMethod,
   getContactMethodList
 } from '@/api/contactMethod'
-import { ref } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { formatDate } from '@/utils/format'
+import { useAppStore } from '@/pinia/modules/app'
+import { toSQLLine } from '@/utils/stringFun'
+import ContactMethodForm from './form.vue'
 
-defineOptions({
-  name: 'ContactMethod'
-})
+const appStore = useAppStore()
+
+const searchForm = ref()
+const tableData = ref([])
+const page = ref(1)
+const pageSize = ref(10)
+const total = ref(0)
+const searchInfo = ref({})
+const multipleSelection = ref([])
 
 const form = ref({
   displayName: '',
@@ -162,24 +175,64 @@ const rules = ref({
   ]
 })
 
-const page = ref(1)
-const total = ref(0)
-const pageSize = ref(10)
-const tableData = ref([])
-const drawerFormVisible = ref(false)
-const type = ref('')
-const formRef = ref()
-const loading = ref(false)
+const dialogFormVisible = ref(false)
+const dialogTitle = ref('')
+const formId = ref(0)
+const editData = ref({})
 
-// 分页
-const handleSizeChange = (val) => {
-  pageSize.value = val
+// 搜索
+const onSubmit = () => {
+  page.value = 1
+  pageSize.value = 10
   getTableData()
 }
 
-const handleCurrentChange = (val) => {
-  page.value = val
+const onReset = () => {
+  searchInfo.value = {}
   getTableData()
+}
+
+// 排序
+const sortChange = ({ prop, order }) => {
+  if (prop) {
+    searchInfo.value.orderKey = toSQLLine(prop)
+    searchInfo.value.desc = order === 'descending'
+  }
+  getTableData()
+}
+
+// 选择
+const handleSelectionChange = (val) => {
+  multipleSelection.value = val
+}
+
+// 批量删除
+const onDelete = async () => {
+  if (multipleSelection.value.length === 0) {
+    ElMessage.warning('请选择要删除的数据')
+    return
+  }
+  
+  ElMessageBox.confirm('确定要删除选中的联系方式吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async () => {
+    try {
+      const ids = multipleSelection.value.map(item => item.ID)
+      for (const id of ids) {
+        await deleteContactMethod({ ID: id })
+      }
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+      getTableData()
+    } catch (error) {
+      console.error('删除失败:', error)
+      ElMessage.error('删除失败')
+    }
+  })
 }
 
 // 查询
@@ -187,7 +240,8 @@ const getTableData = async () => {
   try {
     const table = await getContactMethodList({
       page: page.value,
-      pageSize: pageSize.value
+      pageSize: pageSize.value,
+      ...searchInfo.value
     })
     if (table.code === 0) {
       tableData.value = table.data.list
@@ -201,32 +255,29 @@ const getTableData = async () => {
   }
 }
 
-getTableData()
-
-const editContactMethod = async (row) => {
-  try {
-    const res = await getContactMethod({ ID: row.ID })
-    type.value = 'update'
-    if (res.code === 0) {
-      form.value = { ...res.data.contactMethod }
-      drawerFormVisible.value = true
-    }
-  } catch (error) {
-    console.error('获取详情失败:', error)
-    ElMessage.error('获取详情失败')
-  }
+// 分页
+const handleSizeChange = (val) => {
+  pageSize.value = val
+  getTableData()
 }
 
-const closeDrawer = () => {
-  drawerFormVisible.value = false
-  form.value = {
-    displayName: '',
-    jumpUrl: '',
-    image: '',
-    sort: 0,
-    status: 1
-  }
-  formRef.value?.resetFields()
+const handleCurrentChange = (val) => {
+  page.value = val
+  getTableData()
+}
+
+const editContactMethod = async (row) => {
+  formId.value = row.ID
+  editData.value = { ...row }
+  dialogTitle.value = '编辑联系方式'
+  dialogFormVisible.value = true
+}
+
+const openDialog = () => {
+  formId.value = 0
+  editData.value = {}
+  dialogTitle.value = '新增联系方式'
+  dialogFormVisible.value = true
 }
 
 const removeContactMethod = async (row) => {
@@ -254,45 +305,9 @@ const removeContactMethod = async (row) => {
   })
 }
 
-const enterDrawer = async () => {
-  const valid = await formRef.value?.validate()
-  if (!valid) return
-  
-  loading.value = true
-  try {
-    let res
-    switch (type.value) {
-      case 'create':
-        res = await createContactMethod(form.value)
-        break
-      case 'update':
-        res = await updateContactMethod(form.value)
-        break
-      default:
-        res = await createContactMethod(form.value)
-        break
-    }
-
-    if (res.code === 0) {
-      ElMessage({
-        type: 'success',
-        message: type.value === 'create' ? '创建成功' : '更新成功'
-      })
-      closeDrawer()
-      getTableData()
-    }
-  } catch (error) {
-    console.error('操作失败:', error)
-    ElMessage.error('操作失败')
-  } finally {
-    loading.value = false
-  }
-}
-
-const openDrawer = () => {
-  type.value = 'create'
-  drawerFormVisible.value = true
-}
+onMounted(() => {
+  getTableData()
+})
 </script>
 
 <style scoped>

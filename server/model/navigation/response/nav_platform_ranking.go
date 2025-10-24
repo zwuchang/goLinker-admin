@@ -38,3 +38,4 @@ type PublicPlatformRankingListResponse struct {
 	PageSize int                                 `json:"pageSize"`
 }
 
+

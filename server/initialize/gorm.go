@@ -63,6 +63,8 @@ func RegisterTables() {
 		navigation.NavPlatformConfig{},
 		navigation.NavMarketConfig{},
 		navigation.NavPlatformRanking{},
+		navigation.NavScrollNotice{},
+		navigation.NavPWAConfig{},
 
 		example.ExaFile{},
 		example.ExaCustomer{},

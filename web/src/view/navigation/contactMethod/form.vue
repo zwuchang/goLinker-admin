@@ -1,25 +1,18 @@
 <template>
   <div class="gva-table-box">
     <div class="gva-form-box">
-      <el-form ref="marketConfigFormRef" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入名称" />
+      <el-form ref="contactMethodFormRef" :model="form" label-width="120px">
+        <el-form-item label="显示名称" prop="displayName">
+          <el-input v-model="form.displayName" placeholder="如：Twitter、Facebook、微信等" />
         </el-form-item>
-        <el-form-item label="Logo" prop="logo">
+        <el-form-item label="跳转地址" prop="jumpUrl">
+          <el-input v-model="form.jumpUrl" placeholder="请输入跳转地址" />
+        </el-form-item>
+        <el-form-item label="联系方式图标" prop="image">
           <div class="icon-input-container">
-            <el-input v-model="form.logo" placeholder="请输入Logo地址" />
-            <img v-if="form.logo" :src="form.logo" class="icon-preview" @error="handleImageError" />
+            <el-input v-model="form.image" placeholder="请输入联系方式图标URL" />
+            <img v-if="form.image" :src="form.image" class="icon-preview" @error="handleImageError" />
           </div>
-        </el-form-item>
-        <el-form-item label="跳转地址" prop="jump_url">
-          <el-input v-model="form.jump_url" placeholder="请输入跳转地址" />
-        </el-form-item>
-        <el-form-item label="类型" prop="type">
-          <el-radio-group v-model="form.type">
-            <el-radio :label="1">可关闭</el-radio>
-            <el-radio :label="2">类型2</el-radio>
-            <el-radio :label="3">类型3</el-radio>
-          </el-radio-group>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="form.sort" :min="0" :max="999" />
@@ -29,20 +22,6 @@
             <el-radio :label="1">启用</el-radio>
             <el-radio :label="0">禁用</el-radio>
           </el-radio-group>
-        </el-form-item>
-        <el-form-item label="是否可见" prop="is_visible">
-          <el-radio-group v-model="form.is_visible">
-            <el-radio :label="1">可见</el-radio>
-            <el-radio :label="0">隐藏</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="描述" prop="description">
-          <el-input
-            v-model="form.description"
-            type="textarea"
-            :rows="3"
-            placeholder="请输入描述"
-          />
         </el-form-item>
       </el-form>
     </div>
@@ -55,8 +34,12 @@
 
 <script setup>
 import { ref, reactive, watch } from 'vue'
-import { createMarketConfig, updateMarketConfig } from '@/api/marketConfig'
 import { ElMessage } from 'element-plus'
+import {
+  createContactMethod,
+  updateContactMethod,
+  getContactMethod
+} from '@/api/contactMethod'
 
 const props = defineProps({
   id: {
@@ -71,48 +54,45 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'success'])
 
-const marketConfigFormRef = ref()
-
+const contactMethodFormRef = ref()
 const form = reactive({
-  id: undefined,
-  name: '',
-  logo: '',
-  jump_url: '',
-  type: 1,
+  displayName: '',
+  jumpUrl: '',
+  image: '',
   sort: 0,
-  status: 1,
-  is_visible: 1,
-  description: ''
+  status: 1
 })
 
 const rules = reactive({
-  name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
-  type: [{ required: true, message: '请选择类型', trigger: 'change' }]
+  displayName: [
+    { required: true, message: '请输入显示名称', trigger: 'blur' }
+  ],
+  jumpUrl: [
+    { required: true, message: '请输入跳转地址', trigger: 'blur' }
+  ]
 })
-
-// 重置表单
-const resetForm = () => {
-  Object.assign(form, {
-    id: undefined,
-    name: '',
-    logo: '',
-    jump_url: '',
-    type: 1,
-    sort: 0,
-    status: 1,
-    is_visible: 1,
-    description: ''
-  })
-}
 
 // 监听编辑数据变化
 watch(() => props.editData, (newData) => {
   if (newData && Object.keys(newData).length > 0) {
     Object.assign(form, newData)
-  } else {
-    resetForm()
   }
 }, { immediate: true, deep: true })
+
+// 监听ID变化，获取详情
+watch(() => props.id, async (newId) => {
+  if (newId && newId > 0) {
+    try {
+      const res = await getContactMethod({ ID: newId })
+      if (res.code === 0) {
+        Object.assign(form, res.data.contactMethod)
+      }
+    } catch (error) {
+      console.error('获取详情失败:', error)
+      ElMessage.error('获取详情失败')
+    }
+  }
+}, { immediate: true })
 
 const handleImageError = (e) => {
   e.target.style.display = 'none'
@@ -123,15 +103,15 @@ const closeDialog = () => {
 }
 
 const enterDialog = async () => {
-  const valid = await marketConfigFormRef.value?.validate()
+  const valid = await contactMethodFormRef.value?.validate()
   if (!valid) return
   
   try {
     let res
     if (props.id && props.id > 0) {
-      res = await updateMarketConfig({ ...form, id: props.id })
+      res = await updateContactMethod({ ...form, ID: props.id })
     } else {
-      res = await createMarketConfig(form)
+      res = await createContactMethod(form)
     }
 
     if (res.code === 0) {

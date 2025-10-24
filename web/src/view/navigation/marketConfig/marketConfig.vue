@@ -82,7 +82,7 @@
         <el-table-column align="left" label="排序" prop="sort" width="80" />
         <el-table-column align="left" label="描述" prop="description" width="200" show-overflow-tooltip />
         <el-table-column align="left" label="创建时间" prop="created_at" width="160" />
-        <el-table-column align="left" label="操作" width="160">
+        <el-table-column align="left" label="操作" :width="appStore.operateMinWith" fixed="right">
           <template #default="scope">
             <el-button type="primary" link icon="edit" @click="editMarketConfigFunc(scope.row)">编辑</el-button>
             <el-button type="primary" link icon="delete" @click="deleteMarketConfigFunc(scope.row)">删除</el-button>
@@ -119,11 +119,14 @@ import { ref, reactive, onMounted } from 'vue'
 import { getMarketConfigList, deleteMarketConfig } from '@/api/marketConfig'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { toSQLLine } from '@/utils/stringFun'
+import { useAppStore } from '@/pinia/modules/app'
 import MarketConfigForm from './form.vue'
 
 defineOptions({
   name: 'MarketConfig'
 })
+
+const appStore = useAppStore()
 
 const searchFormRef = ref()
 const tableData = ref([])

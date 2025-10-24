@@ -14,6 +14,8 @@ type RouterGroup struct {
 	NavPlatformConfigRouter
 	NavMarketConfigRouter
 	NavPlatformRankingRouter
+	NavScrollNoticeRouter
+	NavPWAConfigRouter
 }
 
 var (
@@ -28,4 +30,6 @@ var (
 	navPlatformConfigApi  = api.ApiGroupApp.NavigationApiGroup.NavPlatformConfigApi
 	navMarketConfigApi    = api.ApiGroupApp.NavigationApiGroup.NavMarketConfigApi
 	navPlatformRankingApi = api.ApiGroupApp.NavigationApiGroup.NavPlatformRankingApi
+	navScrollNoticeApi    = api.ApiGroupApp.NavigationApiGroup.NavScrollNoticeApi
+	navPWAConfigApi       = api.ApiGroupApp.NavigationApiGroup.NavPWAConfigApi
 )

@@ -107,6 +107,8 @@ func Routers() *gin.Engine {
 		navigationRouter.InitNavPlatformConfigRouter(PrivateGroup)          // 导航-平台游戏配置
 		navigationRouter.InitNavMarketConfigRouter(PrivateGroup)            // 导航-市场配置
 		navigationRouter.InitNavPlatformRankingRouter(PrivateGroup)         // 导航-平台排行榜
+		navigationRouter.InitNavScrollNoticeRouter(PrivateGroup)            // 导航-滚动通知
+		navigationRouter.InitNavPWAConfigRouter(PrivateGroup)               // 导航-PWA配置
 		navigationRouter.InitPublicRouter(PublicGroup)                      // 公开接口（无需认证）
 		exampleRouter.InitCustomerRouter(PrivateGroup)                      // 客户路由
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)         // 文件上传下载功能路由

@@ -25,5 +25,7 @@ func (s *PublicRouter) InitPublicRouter(Router *gin.RouterGroup) {
 		publicRouter.POST("platform/getGame", publicApi.GetGame)             // 获取对应游戏
 		publicRouter.POST("game/getMarket", publicApi.GetMarket)             // 获取对应市场
 		publicRouter.POST("ranking/platforms", publicApi.GetPlatformRanking) // 获取平台排行榜
+		publicRouter.POST("notice/list", publicApi.GetNoticeList)            // 获取滚动通知列表
+		publicRouter.GET("pwa/config", publicApi.GetPWAConfig)               // 获取PWA配置
 	}
 }

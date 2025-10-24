@@ -37,7 +37,7 @@
         <el-table-column
           align="left"
           label="id"
-          min-width="60"
+          min-width="80"
           prop="ID"
           sortable="custom"
         />
@@ -79,7 +79,7 @@
         <el-table-column
           align="left"
           label="悬浮图标状态"
-          min-width="120"
+          min-width="180"
           prop="floating_status"
           sortable="custom"
         >

@@ -21,8 +21,8 @@
           <el-input v-model="form.icon" placeholder="请输入图标名称" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">确定</el-button>
           <el-button @click="onClose">取消</el-button>
+          <el-button type="primary" @click="onSubmit">确定</el-button>
         </el-form-item>
       </el-form>
     </div>

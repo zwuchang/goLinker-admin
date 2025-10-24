@@ -296,6 +296,74 @@ func (s *NavApiCheckService) CheckAndCreateNavigationApis() error {
 			ApiGroup:    "导航管理",
 			Method:      "GET",
 		},
+		// 滚动通知API
+		{
+			Path:        "/navigation/notice/createNotice",
+			Description: "创建滚动通知",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/notice/updateNotice",
+			Description: "更新滚动通知",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/notice/deleteNotice",
+			Description: "删除滚动通知",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/notice/getNoticeList",
+			Description: "获取滚动通知列表",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/notice/findNotice",
+			Description: "根据ID获取滚动通知",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		// PWA配置API
+		{
+			Path:        "/navigation/pwaConfig/createPWAConfig",
+			Description: "创建PWA配置",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/pwaConfig/updatePWAConfig",
+			Description: "更新PWA配置",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/pwaConfig/deletePWAConfig",
+			Description: "删除PWA配置",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/pwaConfig/getPWAConfigList",
+			Description: "获取PWA配置列表",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/pwaConfig/findPWAConfig",
+			Description: "根据ID获取PWA配置",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
+		{
+			Path:        "/navigation/pwaConfig/clearPWACache",
+			Description: "清除PWA配置缓存",
+			ApiGroup:    "导航管理",
+			Method:      "POST",
+		},
 	}
 
 	// 检查并创建每个API
@@ -383,6 +451,10 @@ func (s *NavApiCheckService) CheckNavigationApisExist() bool {
 		{"/navigation/marketConfig/getMarketConfigList", "POST"},
 		{"/navigation/platformRanking/createPlatformRanking", "POST"},
 		{"/navigation/platformRanking/getPlatformRankingList", "GET"},
+		{"/navigation/notice/createNotice", "POST"},
+		{"/navigation/notice/getNoticeList", "POST"},
+		{"/navigation/pwaConfig/createPWAConfig", "POST"},
+		{"/navigation/pwaConfig/getPWAConfigList", "POST"},
 	}
 
 	for _, api := range keyApis {
@@ -451,6 +523,17 @@ func (s *NavApiCheckService) GetNavigationApiStatus() map[string]interface{} {
 		{"/navigation/platformRanking/deletePlatformRanking", "POST", "删除平台排行榜"},
 		{"/navigation/platformRanking/getPlatformRankingList", "GET", "获取平台排行榜列表"},
 		{"/navigation/platformRanking/findPlatformRanking", "GET", "根据ID获取平台排行榜"},
+		{"/navigation/notice/createNotice", "POST", "创建滚动通知"},
+		{"/navigation/notice/updateNotice", "POST", "更新滚动通知"},
+		{"/navigation/notice/deleteNotice", "POST", "删除滚动通知"},
+		{"/navigation/notice/getNoticeList", "POST", "获取滚动通知列表"},
+		{"/navigation/notice/findNotice", "POST", "根据ID获取滚动通知"},
+		{"/navigation/pwaConfig/createPWAConfig", "POST", "创建PWA配置"},
+		{"/navigation/pwaConfig/updatePWAConfig", "POST", "更新PWA配置"},
+		{"/navigation/pwaConfig/deletePWAConfig", "POST", "删除PWA配置"},
+		{"/navigation/pwaConfig/getPWAConfigList", "POST", "获取PWA配置列表"},
+		{"/navigation/pwaConfig/findPWAConfig", "POST", "根据ID获取PWA配置"},
+		{"/navigation/pwaConfig/clearPWACache", "POST", "清除PWA配置缓存"},
 	}
 
 	apiStatus := make(map[string]bool)

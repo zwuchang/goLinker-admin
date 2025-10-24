@@ -24,3 +24,4 @@ type NavPlatformRanking struct {
 func (NavPlatformRanking) TableName() string {
 	return "nav_platform_rankings"
 }
+

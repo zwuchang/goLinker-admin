@@ -57,6 +57,8 @@
   "/src/view/navigation/platformConfig/form.vue": "Form",
   "/src/view/navigation/platformConfig/platformConfig.vue": "PlatformConfig",
   "/src/view/navigation/platformRanking/platformRanking.vue": "PlatformRanking",
+  "/src/view/navigation/pwaConfig/pwaConfig.vue": "PWAConfig",
+  "/src/view/navigation/scrollNotice/scrollNotice.vue": "ScrollNotice",
   "/src/view/person/person.vue": "Person",
   "/src/view/routerHolder.vue": "RouterHolder",
   "/src/view/superAdmin/api/api.vue": "Api",

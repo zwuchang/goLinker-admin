@@ -92,8 +92,8 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">确定</el-button>
           <el-button @click="onClose">取消</el-button>
+          <el-button type="primary" @click="onSubmit">确定</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -186,11 +186,12 @@ watch(() => props.editData, (newData) => {
 const onSubmit = async () => {
   gameFormRef.value.validate(async (valid) => {
     if (valid) {
-      // 确保数值字段为整数类型
+      // 确保数值字段为整数类型，并处理显示时间格式
       const submitData = {
         ...form,
         views: parseInt(form.views) || 0,
-        sort: parseInt(form.sort) || 0
+        sort: parseInt(form.sort) || 0,
+        display_time: form.display_time || '' // 确保显示时间格式一致
       }
       
       let res

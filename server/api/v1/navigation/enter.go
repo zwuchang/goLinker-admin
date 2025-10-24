@@ -14,6 +14,8 @@ type ApiGroup struct {
 	NavPlatformConfigApi
 	NavMarketConfigApi
 	NavPlatformRankingApi
+	NavScrollNoticeApi
+	NavPWAConfigApi
 }
 
 var (
@@ -27,4 +29,6 @@ var (
 	navPlatformConfigService  = navigation.ServiceGroupApp.NavPlatformConfigService
 	navMarketConfigService    = navigation.ServiceGroupApp.NavMarketConfigService
 	navPlatformRankingService = navigation.ServiceGroupApp.NavPlatformRankingService
+	navScrollNoticeService    = navigation.ServiceGroupApp.NavScrollNoticeService
+	navPWAConfigService       = navigation.ServiceGroupApp.NavPWAConfigService
 )

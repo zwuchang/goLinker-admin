@@ -599,3 +599,59 @@ func (a *PublicApi) GetPlatformRanking(c *gin.Context) {
 
 	response.OkWithDetailed(rankingResponse, "Success", c)
 }
+
+// GetScrollNoticeList 获取滚动通知列表（公开接口，无需认证）
+// @Tags     PublicApi
+// @Summary  Get scroll notice list
+// @accept   application/json
+// @Produce  application/json
+// @Success  200  {object} response.Response{data=navResponse.PublicScrollNoticeListResponse} "Success"
+// @Router   /public/notice/list [post]
+func (a *PublicApi) GetNoticeList(c *gin.Context) {
+	// 获取可见的滚动通知列表
+	list, err := navScrollNoticeService.GetVisibleScrollNotices(10)
+	if err != nil {
+		global.GVA_LOG.Error("获取滚动通知列表失败!", zap.Error(err))
+		response.FailWithMessage("Failed to get scroll notice list", c)
+		return
+	}
+
+	// 转换为公开滚动通知响应格式
+	var noticeList []navResponse.PublicScrollNoticeItemResponse
+	for _, notice := range list {
+		noticeList = append(noticeList, navResponse.PublicScrollNoticeItemResponse{
+			ID:      notice.ID,
+			Title:   notice.Title,
+			Content: notice.Content,
+		})
+	}
+
+	// 构建响应数据
+	noticeResponse := navResponse.PublicScrollNoticeListResponse{
+		List:     noticeList,
+		Total:    int64(len(noticeList)),
+		Page:     1,
+		PageSize: len(noticeList),
+	}
+
+	response.OkWithDetailed(noticeResponse, "Success", c)
+}
+
+// GetPWAConfig 获取PWA配置（公开接口，无需认证）
+// @Tags     PublicApi
+// @Summary  Get PWA configuration
+// @accept   application/json
+// @Produce  application/json
+// @Success  200  {object} navResponse.PWAConfigItemResponse "Success"
+// @Router   /public/pwa/config [get]
+func (a *PublicApi) GetPWAConfig(c *gin.Context) {
+	// 直接获取PWA配置（服务层已处理缓存和默认配置逻辑）
+	pwaConfig, err := navPWAConfigService.GetActivePWAConfig()
+	if err != nil {
+		global.GVA_LOG.Error("获取PWA配置失败!", zap.Error(err))
+		response.FailWithMessage("Failed to get PWA config", c)
+		return
+	}
+
+	c.JSON(200, pwaConfig)
+}

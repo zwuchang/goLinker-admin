@@ -73,10 +73,10 @@
             {{ formatDate(scope.row.CreatedAt) }}
           </template>
         </el-table-column>
-        <el-table-column align="left" label="操作" width="200">
+        <el-table-column align="left" label="操作" :width="appStore.operateMinWith" fixed="right">
           <template #default="scope">
-            <el-button type="primary" link icon="edit" size="small" @click="updatePlatformRanking(scope.row)">变更</el-button>
-            <el-button type="primary" link icon="delete" size="small" @click="deletePlatformRanking(scope.row)">删除</el-button>
+            <el-button type="primary" link icon="edit" @click="editPlatformRanking(scope.row)">编辑</el-button>
+            <el-button type="primary" link icon="delete" @click="deletePlatformRanking(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -169,10 +169,14 @@ import {
 } from '@/api/platformRanking'
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { formatDate } from '@/utils/format'
+import { useAppStore } from '@/pinia/modules/app'
 
 defineOptions({
   name: 'PlatformRanking'
 })
+
+const appStore = useAppStore()
 
 const page = ref(1)
 const pageSize = ref(10)
@@ -194,6 +198,7 @@ const form = reactive({
   status: 1,
   isVisible: 1,
   sort: 0,
+  ID: 0,
 })
 
 const rules = reactive({
@@ -265,6 +270,7 @@ const resetForm = () => {
     status: 1,
     isVisible: 1,
     sort: 0,
+    ID: 0,
   })
 }
 
@@ -288,7 +294,7 @@ const enterDialog = async() => {
   })
 }
 
-const updatePlatformRanking = (row) => {
+const editPlatformRanking = (row) => {
   Object.assign(form, row)
   dialogFormVisible.value = true
 }
@@ -326,11 +332,6 @@ const onDelete = async() => {
     })
     getTableData()
   })
-}
-
-const formatDate = (date) => {
-  if (!date) return ''
-  return new Date(date).toLocaleString()
 }
 
 onMounted(() => {
