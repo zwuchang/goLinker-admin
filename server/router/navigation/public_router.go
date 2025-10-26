@@ -14,7 +14,7 @@ func (s *PublicRouter) InitPublicRouter(Router *gin.RouterGroup) {
 	publicRouter.Use(middleware.AccessStatsMiddleware()) // 使用访问统计中间件
 	{
 		// 网站信息相关接口（无需认证）
-		publicRouter.POST("site/info", publicApi.GetSiteInfo)                // 获取网站信息
+		publicRouter.Any("site/info", publicApi.GetSiteInfo)                 // 获取网站信息
 		publicRouter.POST("banner/list", publicApi.GetBannerList)            // 获取Banner列表
 		publicRouter.POST("game/list", publicApi.GetGameList)                // 获取游戏列表
 		publicRouter.POST("category/list", publicApi.GetGameCategoryList)    // 获取游戏类别列表
@@ -26,6 +26,7 @@ func (s *PublicRouter) InitPublicRouter(Router *gin.RouterGroup) {
 		publicRouter.POST("game/getMarket", publicApi.GetMarket)             // 获取对应市场
 		publicRouter.POST("ranking/platforms", publicApi.GetPlatformRanking) // 获取平台排行榜
 		publicRouter.POST("notice/list", publicApi.GetNoticeList)            // 获取滚动通知列表
-		publicRouter.GET("pwa/config", publicApi.GetPWAConfig)               // 获取PWA配置
+		publicRouter.GET("manifest.json", publicApi.GetPWAConfig)            // 获取PWA配置
+		publicRouter.POST("theme/config", publicApi.GetThemeConfig)          // 获取主题配置
 	}
 }

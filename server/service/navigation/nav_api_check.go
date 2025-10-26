@@ -455,6 +455,8 @@ func (s *NavApiCheckService) CheckNavigationApisExist() bool {
 		{"/navigation/notice/getNoticeList", "POST"},
 		{"/navigation/pwaConfig/createPWAConfig", "POST"},
 		{"/navigation/pwaConfig/getPWAConfigList", "POST"},
+		{"/navigation/themeConfig/createThemeConfig", "POST"},
+		{"/navigation/themeConfig/getThemeConfigList", "POST"},
 	}
 
 	for _, api := range keyApis {
@@ -534,6 +536,14 @@ func (s *NavApiCheckService) GetNavigationApiStatus() map[string]interface{} {
 		{"/navigation/pwaConfig/getPWAConfigList", "POST", "获取PWA配置列表"},
 		{"/navigation/pwaConfig/findPWAConfig", "POST", "根据ID获取PWA配置"},
 		{"/navigation/pwaConfig/clearPWACache", "POST", "清除PWA配置缓存"},
+		{"/navigation/themeConfig/createThemeConfig", "POST", "创建主题配置"},
+		{"/navigation/themeConfig/updateThemeConfig", "PUT", "更新主题配置"},
+		{"/navigation/themeConfig/deleteThemeConfig", "DELETE", "删除主题配置"},
+		{"/navigation/themeConfig/getThemeConfigList", "POST", "获取主题配置列表"},
+		{"/navigation/themeConfig/getThemeConfigById", "POST", "根据ID获取主题配置"},
+		{"/navigation/themeConfig/setDefaultTheme", "POST", "设置默认主题"},
+		{"/navigation/themeConfig/getDefaultTheme", "GET", "获取默认主题"},
+		{"/navigation/themeConfig/getAllThemes", "GET", "获取所有主题"},
 	}
 
 	apiStatus := make(map[string]bool)

@@ -280,6 +280,7 @@ func (a *PublicApi) GetContactInfo(c *gin.Context) {
 		ContactConfig: navResponse.ContactConfigInfo{
 			BannerImage: contactConfig.BannerImage,
 			Email:       contactConfig.Email,
+			ContactUrl:  contactConfig.ContactUrl,
 		},
 		UpdateTime: contactConfig.UpdatedAt.Format("2006-01-02 15:04:05"),
 	}
@@ -654,4 +655,34 @@ func (a *PublicApi) GetPWAConfig(c *gin.Context) {
 	}
 
 	c.JSON(200, pwaConfig)
+}
+
+// GetThemeConfig 获取主题配置（公开接口，无需认证）
+// @Tags     PublicApi
+// @Summary  Get theme configuration
+// @accept   application/json
+// @Produce  application/json
+// @Success  200  {object} response.Response{data=object{id=uint,config_json=string}} "Success"
+// @Router   /public/theme/config [post]
+func (a *PublicApi) GetThemeConfig(c *gin.Context) {
+	// 直接获取活跃主题配置（服务层已处理缓存和默认逻辑）
+	themeConfig, err := navThemeConfigService.GetActiveThemeConfig()
+	if err != nil {
+		global.GVA_LOG.Error("获取主题配置失败!", zap.Error(err))
+		response.FailWithMessage("Failed to get theme config", c)
+		return
+	}
+
+	// 只返回id和config_json
+	type ThemeConfigResponse struct {
+		ID         uint   `json:"id"`
+		ConfigJson string `json:"config_json"`
+	}
+
+	themeResponse := ThemeConfigResponse{
+		ID:         themeConfig.ID,
+		ConfigJson: themeConfig.ConfigJson,
+	}
+
+	response.OkWithDetailed(themeResponse, "Success", c)
 }

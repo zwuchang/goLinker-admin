@@ -185,6 +185,20 @@ func (s *NavMenuCheckService) CheckAndCreateNavigationMenus() error {
 				Icon:  "mobile",
 			},
 		},
+		// 主题配置子菜单
+		{
+			MenuLevel: 1,
+			Hidden:    false,
+			ParentId:  0, // 稍后会更新为实际的父菜单ID
+			Path:      "themeConfig",
+			Name:      "themeConfig",
+			Component: "view/navigation/themeConfig/themeConfig.vue",
+			Sort:      12,
+			Meta: system.Meta{
+				Title: "主题配置",
+				Icon:  "brush",
+			},
+		},
 	}
 
 	// 检查并创建主菜单
@@ -284,7 +298,7 @@ func (s *NavMenuCheckService) CheckNavigationMenusExist() bool {
 	}
 
 	// 检查关键菜单是否存在
-	keyMenus := []string{"navigation", "contactConfig", "contactMethod", "gameCategory", "game", "gameConfig", "banner", "platformConfig", "marketConfig", "platformRanking", "scrollNotice", "pwaConfig"}
+	keyMenus := []string{"navigation", "contactConfig", "contactMethod", "gameCategory", "game", "gameConfig", "banner", "platformConfig", "marketConfig", "platformRanking", "scrollNotice", "pwaConfig", "themeConfig"}
 	for _, menuPath := range keyMenus {
 		var menu system.SysBaseMenu
 		if errors.Is(global.GVA_DB.Where("path = ?", menuPath).First(&menu).Error, gorm.ErrRecordNotFound) {
@@ -304,7 +318,7 @@ func (s *NavMenuCheckService) GetNavigationMenuStatus() map[string]interface{} {
 	}
 
 	// 检查各个菜单的状态
-	menus := []string{"navigation", "contactConfig", "contactMethod", "gameCategory", "game", "gameConfig", "banner", "platformConfig", "marketConfig", "platformRanking", "scrollNotice", "pwaConfig"}
+	menus := []string{"navigation", "contactConfig", "contactMethod", "gameCategory", "game", "gameConfig", "banner", "platformConfig", "marketConfig", "platformRanking", "scrollNotice", "pwaConfig", "themeConfig"}
 	menuStatus := make(map[string]bool)
 
 	for _, menuPath := range menus {

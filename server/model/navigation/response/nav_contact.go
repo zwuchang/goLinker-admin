@@ -15,6 +15,7 @@ type ContactMethodInfo struct {
 type ContactConfigInfo struct {
 	BannerImage string `json:"bannerImage"` // 横幅图片
 	Email       string `json:"email"`       // 客服邮箱
+	ContactUrl  string `json:"contactUrl"`  // 联系网址
 }
 
 // PublicContactResponse 公开联系方式响应
