@@ -19,15 +19,13 @@ type NavPlatformRankingListResponse struct {
 
 // PublicPlatformRankingItemResponse 公开平台排行榜项响应
 type PublicPlatformRankingItemResponse struct {
-	ID           uint    `json:"id"`
-	Rank         int     `json:"rank"`
-	PlatformName string  `json:"platformName"`
-	Logo         string  `json:"logo"`
-	Rating       float64 `json:"rating"`
-	Features     string  `json:"features"`
-	FeatureType  string  `json:"featureType"`
-	VisitUrl     string  `json:"visitUrl"`
-	IsNew        int     `json:"isNew"`
+	ID           uint   `json:"id"`
+	Rank         int    `json:"rank"`
+	PlatformName string `json:"platformName"`
+	Logo         string `json:"logo"`
+	Rating       string `json:"rating"`
+	VisitUrl     string `json:"visitUrl"`
+	IsNew        int    `json:"isNew"`
 }
 
 // PublicPlatformRankingListResponse 公开平台排行榜列表响应
@@ -37,5 +35,3 @@ type PublicPlatformRankingListResponse struct {
 	Page     int                                 `json:"page"`
 	PageSize int                                 `json:"pageSize"`
 }
-
-

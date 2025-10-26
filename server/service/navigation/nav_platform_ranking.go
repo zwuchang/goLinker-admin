@@ -28,7 +28,7 @@ func (s *NavPlatformRankingService) GetPlatformRankingList(info navRequest.NavPl
 		return
 	}
 
-	err = db.Order("sort ASC, created_at ASC").Limit(limit).Offset(offset).Find(&platformRankings).Error
+	err = db.Order("`rank` ASC, created_at ASC").Limit(limit).Offset(offset).Find(&platformRankings).Error
 	return platformRankings, total, err
 }
 
@@ -113,7 +113,7 @@ func (s *NavPlatformRankingService) GetPlatformRankingById(id uint) (platformRan
 // GetVisiblePlatformRankings 获取可见的平台排行榜列表（公开接口使用）
 func (s *NavPlatformRankingService) GetVisiblePlatformRankings(limit int) (list []navigation.NavPlatformRanking, err error) {
 	err = global.GVA_DB.Where("status = ? AND is_visible = ?", 1, 1).
-		Order("sort ASC, rank ASC").
+		Order("`rank` ASC, created_at ASC").
 		Limit(limit).
 		Find(&list).Error
 	return list, err

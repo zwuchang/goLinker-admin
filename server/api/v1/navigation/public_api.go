@@ -583,8 +583,6 @@ func (a *PublicApi) GetPlatformRanking(c *gin.Context) {
 			PlatformName: ranking.PlatformName,
 			Logo:         ranking.Logo,
 			Rating:       ranking.Rating,
-			Features:     ranking.Features,
-			FeatureType:  ranking.FeatureType,
 			VisitUrl:     ranking.VisitUrl,
 			IsNew:        ranking.IsNew,
 		})

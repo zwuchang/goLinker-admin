@@ -22,53 +22,39 @@
         <el-button type="primary" icon="plus" @click="openDialog">新增平台排行榜</el-button>
         <el-button type="danger" icon="delete" @click="onDelete" :disabled="!multipleSelection.length">批量删除</el-button>
       </div>
-      <el-table
-        ref="multipleTable"
-        style="width: 100%"
-        tooltip-effect="dark"
-        :data="tableData"
-        row-key="ID"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="排名" prop="rank" width="80" />
-        <el-table-column align="left" label="平台名称" prop="platformName" width="150" />
-        <el-table-column align="left" label="Logo" width="100">
+      <el-table ref="multipleTable" style="width: 100%" tooltip-effect="dark" :data="tableData" row-key="ID"
+        @selection-change="handleSelectionChange">
+        <el-table-column type="selection" />
+        <el-table-column align="left" label="排名" prop="rank"  />
+        <el-table-column align="left" label="平台名称" prop="platformName"/>
+        <el-table-column align="left" label="Logo">
           <template #default="scope">
-            <el-image
-              v-if="scope.row.logo"
-              :src="scope.row.logo"
-              :preview-src-list="[scope.row.logo]"
-              style="width: 40px; height: 40px"
-              fit="cover"
-            />
+            <el-image v-if="scope.row.logo" :src="scope.row.logo" :preview-src-list="[scope.row.logo]"
+              style="width: 40px; height: 40px" fit="cover" />
             <span v-else>无</span>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="评分" prop="rating" width="80" />
-        <el-table-column align="left" label="特色功能" prop="features" width="150" />
-        <el-table-column align="left" label="功能类型" prop="featureType" width="100" />
-        <el-table-column align="left" label="是否新平台" width="100">
+        <el-table-column align="left" label="评分" prop="rating"  />
+        <el-table-column align="left" label="是否新平台" >
           <template #default="scope">
             <el-tag v-if="scope.row.isNew === 1" type="success">是</el-tag>
             <el-tag v-else type="info">否</el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="状态" width="80">
+        <el-table-column align="left" label="状态" >
           <template #default="scope">
             <el-tag v-if="scope.row.status === 1" type="success">启用</el-tag>
             <el-tag v-else type="danger">禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="是否显示" width="100">
+        <el-table-column align="left" label="是否显示" >
           <template #default="scope">
             <el-tag v-if="scope.row.isVisible === 1" type="success">显示</el-tag>
             <el-tag v-else type="info">隐藏</el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="排序" prop="sort" width="80" />
 
-        <el-table-column align="left" label="创建时间" prop="CreatedAt" width="150">
+        <el-table-column align="left" label="创建时间" prop="CreatedAt"  min-width="180">
           <template #default="scope">
             {{ formatDate(scope.row.CreatedAt) }}
           </template>
@@ -81,75 +67,55 @@
         </el-table-column>
       </el-table>
       <div class="gva-pagination">
-        <el-pagination
-          layout="total, sizes, prev, pager, next, jumper"
-          :current-page="page"
-          :page-size="pageSize"
-          :page-sizes="[10, 30, 50, 100]"
-          :total="total"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-        />
+        <el-pagination layout="total, sizes, prev, pager, next, jumper" :current-page="page" :page-size="pageSize"
+          :page-sizes="[10, 30, 50, 100]" :total="total" @current-change="handleCurrentChange"
+          @size-change="handleSizeChange" />
       </div>
     </div>
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="平台排行榜" destroy-on-close>
-      <el-form
-        ref="elFormRef"
-        :model="form"
-        :rules="rules"
-        label-width="120px"
-        label-position="left"
-      >
-        <el-form-item label="排名" prop="rank">
-          <el-input-number v-model="form.rank" :min="1" placeholder="请输入排名" />
-        </el-form-item>
-        <el-form-item label="平台名称" prop="platformName">
-          <el-input v-model="form.platformName" placeholder="请输入平台名称" />
-        </el-form-item>
-        <el-form-item label="Logo地址" prop="logo">
-          <el-input v-model="form.logo" placeholder="请输入Logo地址" />
-          <el-image
-            v-if="form.logo"
-            :src="form.logo"
-            style="width: 100px; height: 100px; margin-top: 10px"
-            fit="cover"
-          />
-        </el-form-item>
-        <el-form-item label="评分" prop="rating">
-          <el-input-number v-model="form.rating" :min="0" :max="5" :precision="1" placeholder="请输入评分" />
-        </el-form-item>
-        <el-form-item label="特色功能" prop="features">
-          <el-input v-model="form.features" placeholder="请输入特色功能描述" />
-        </el-form-item>
-        <el-form-item label="功能类型" prop="featureType">
-          <el-input v-model="form.featureType" placeholder="请输入功能类型" />
-        </el-form-item>
-        <el-form-item label="访问链接" prop="visitUrl">
-          <el-input v-model="form.visitUrl" placeholder="请输入访问链接" />
-        </el-form-item>
-        <el-form-item label="是否新平台" prop="isNew">
-          <el-radio-group v-model="form.isNew">
-            <el-radio :label="1">是</el-radio>
-            <el-radio :label="0">否</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-radio-group v-model="form.status">
-            <el-radio :label="1">启用</el-radio>
-            <el-radio :label="0">禁用</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="是否显示" prop="isVisible">
-          <el-radio-group v-model="form.isVisible">
-            <el-radio :label="1">显示</el-radio>
-            <el-radio :label="0">隐藏</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input-number v-model="form.sort" :min="0" placeholder="请输入排序值" />
-        </el-form-item>
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="平台排行榜" destroy-on-close width="600px">
+      <div class="gva-table-box">
+        <div class="gva-form-box">
+          <el-form ref="elFormRef" :model="form" :rules="rules" label-width="120px">
+            <el-form-item label="排名" prop="rank">
+              <el-input-number v-model="form.rank" :min="1" placeholder="请输入排名" />
+            </el-form-item>
+            <el-form-item label="平台名称" prop="platformName">
+              <el-input v-model="form.platformName" placeholder="请输入平台名称" />
+            </el-form-item>
+            <el-form-item label="Logo地址" prop="logo">
+              <el-input v-model="form.logo" placeholder="请输入Logo地址" />
+              <el-image v-if="form.logo" :src="form.logo" style="width: 100px; height: 100px; margin-top: 10px"
+                fit="cover" />
+            </el-form-item>
+            <el-form-item label="评分" prop="rating">
+              <el-input v-model="form.rating" placeholder="请输入评分" />
+            </el-form-item>
+           
+            <el-form-item label="访问链接" prop="visitUrl">
+              <el-input v-model="form.visitUrl" placeholder="请输入访问链接" />
+            </el-form-item>
+            <el-form-item label="是否新平台" prop="isNew">
+              <el-radio-group v-model="form.isNew">
+                <el-radio :label="1">是</el-radio>
+                <el-radio :label="0">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="状态" prop="status">
+              <el-radio-group v-model="form.status">
+                <el-radio :label="1">启用</el-radio>
+                <el-radio :label="0">禁用</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="是否显示" prop="isVisible">
+              <el-radio-group v-model="form.isVisible">
+                <el-radio :label="1">显示</el-radio>
+                <el-radio :label="0">隐藏</el-radio>
+              </el-radio-group>
+            </el-form-item>
 
-      </el-form>
+          </el-form>
+        </div>
+      </div>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">取 消</el-button>
@@ -219,7 +185,7 @@ const onReset = () => {
   getTableData()
 }
 
-const getTableData = async() => {
+const getTableData = async () => {
   const table = await getPlatformRankingList({
     page: page.value,
     pageSize: pageSize.value,
@@ -274,8 +240,8 @@ const resetForm = () => {
   })
 }
 
-const enterDialog = async() => {
-  elFormRef.value?.validate(async(valid) => {
+const enterDialog = async () => {
+  elFormRef.value?.validate(async (valid) => {
     if (!valid) return
     let res
     if (form.ID) {
@@ -299,12 +265,12 @@ const editPlatformRanking = (row) => {
   dialogFormVisible.value = true
 }
 
-const deletePlatformRanking = async(row) => {
+const deletePlatformRanking = async (row) => {
   ElMessageBox.confirm('此操作将永久删除该平台排行榜，是否继续？', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
-  }).then(async() => {
+  }).then(async () => {
     const res = await deletePlatformRankingApi({ id: row.ID })
     if (res.code === 0) {
       ElMessage({
@@ -316,12 +282,12 @@ const deletePlatformRanking = async(row) => {
   })
 }
 
-const onDelete = async() => {
+const onDelete = async () => {
   ElMessageBox.confirm('此操作将永久删除所选平台排行榜，是否继续？', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
-  }).then(async() => {
+  }).then(async () => {
     const ids = multipleSelection.value.map(item => item.ID)
     for (const id of ids) {
       await deletePlatformRankingApi({ id })
@@ -342,28 +308,5 @@ onMounted(() => {
 <style scoped>
 .platform-ranking-container {
   padding: 20px;
-}
-
-.gva-search-box {
-  margin-bottom: 20px;
-}
-
-.gva-table-box {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-}
-
-.gva-btn-list {
-  margin-bottom: 20px;
-}
-
-.gva-pagination {
-  margin-top: 20px;
-  text-align: right;
-}
-
-.dialog-footer {
-  text-align: right;
 }
 </style>

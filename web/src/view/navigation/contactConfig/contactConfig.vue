@@ -10,6 +10,10 @@
           <el-form-item label="横幅图片">
             <el-input v-model="form.bannerImage" placeholder="请输入联系客服横幅图片" />
           </el-form-item>
+
+          <el-form-item label="联系网址">
+            <el-input v-model="form.contactUrl" placeholder="请输入联系网址" />
+          </el-form-item>
           
           <el-form-item>
             <el-button type="primary" @click="saveConfig" :loading="loading">保存配置</el-button>
@@ -22,7 +26,6 @@
 
 <script setup>
 import { getContactConfig, updateContactConfig } from '@/api/contactConfig'
-import SelectImage from '@/components/selectImage/selectImage.vue'
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 
@@ -32,13 +35,17 @@ defineOptions({
 
 const form = ref({
   email: '',
-  bannerImage: ''
+  bannerImage: '',
+  contactUrl: ''
 })
 
 const rules = ref({
   email: [
     { required: true, message: '请输入客服邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' }
+    { type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' },
+  ],
+  contactUrl: [
+    { required: true, message: '请输入联系网址', trigger: 'blur' }
   ]
 })
 
@@ -84,11 +91,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.gva-table-box {
-  padding: 20px;
-}
 
-.el-card {
-  max-width: 800px;
-}
+
 </style>
