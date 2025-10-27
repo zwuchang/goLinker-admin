@@ -110,6 +110,7 @@ func Routers() *gin.Engine {
 		navigationRouter.InitNavScrollNoticeRouter(PrivateGroup)            // 导航-滚动通知
 		navigationRouter.InitNavPWAConfigRouter(PrivateGroup)               // 导航-PWA配置
 		navigationRouter.InitNavThemeConfigRouter(PrivateGroup)             // 导航-主题配置
+		navigationRouter.InitNavActivityConfigRouter(PrivateGroup)          // 导航-活动配置
 		navigationRouter.InitPublicRouter(PublicGroup)                      // 公开接口（无需认证）
 		exampleRouter.InitCustomerRouter(PrivateGroup)                      // 客户路由
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)         // 文件上传下载功能路由

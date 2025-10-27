@@ -17,6 +17,7 @@ type RouterGroup struct {
 	NavScrollNoticeRouter
 	NavPWAConfigRouter
 	NavThemeConfigRouter
+	NavActivityConfigRouter
 }
 
 var (
@@ -34,4 +35,5 @@ var (
 	navScrollNoticeApi    = api.ApiGroupApp.NavigationApiGroup.NavScrollNoticeApi
 	navPWAConfigApi       = api.ApiGroupApp.NavigationApiGroup.NavPWAConfigApi
 	navThemeConfigApi     = api.ApiGroupApp.NavigationApiGroup.NavThemeConfigApi
+	navActivityConfigApi  = api.ApiGroupApp.NavigationApiGroup.NavActivityConfigApi
 )

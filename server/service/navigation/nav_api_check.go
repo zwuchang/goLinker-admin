@@ -457,6 +457,8 @@ func (s *NavApiCheckService) CheckNavigationApisExist() bool {
 		{"/navigation/pwaConfig/getPWAConfigList", "POST"},
 		{"/navigation/themeConfig/createThemeConfig", "POST"},
 		{"/navigation/themeConfig/getThemeConfigList", "POST"},
+		{"/navigation/activityConfig/createActivityConfig", "POST"},
+		{"/navigation/activityConfig/getActivityConfigList", "POST"},
 	}
 
 	for _, api := range keyApis {

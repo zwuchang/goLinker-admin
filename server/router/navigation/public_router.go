@@ -28,5 +28,7 @@ func (s *PublicRouter) InitPublicRouter(Router *gin.RouterGroup) {
 		publicRouter.POST("notice/list", publicApi.GetNoticeList)            // 获取滚动通知列表
 		publicRouter.GET("manifest.json", publicApi.GetPWAConfig)            // 获取PWA配置
 		publicRouter.POST("theme/config", publicApi.GetThemeConfig)          // 获取主题配置
+		publicRouter.POST("activity/list", publicApi.GetActivityConfigList)  // 获取活动列表
+		publicRouter.POST("activity/detail", publicApi.GetActivityDetail)    // 获取活动详情
 	}
 }

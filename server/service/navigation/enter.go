@@ -17,6 +17,7 @@ type ServiceGroup struct {
 	NavScrollNoticeService
 	NavPWAConfigService
 	NavThemeConfigService
+	NavActivityConfigService
 }
 
 var ServiceGroupApp = new(ServiceGroup)

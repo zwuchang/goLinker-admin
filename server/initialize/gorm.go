@@ -66,6 +66,7 @@ func RegisterTables() {
 		navigation.NavScrollNotice{},
 		navigation.NavPWAConfig{},
 		navigation.NavThemeConfig{},
+		navigation.NavActivityConfig{},
 
 		example.ExaFile{},
 		example.ExaCustomer{},

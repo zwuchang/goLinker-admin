@@ -684,3 +684,99 @@ func (a *PublicApi) GetThemeConfig(c *gin.Context) {
 
 	response.OkWithDetailed(themeResponse, "Success", c)
 }
+
+// GetActivityConfigList 获取活动列表（公开接口，无需认证）
+// @Tags     PublicApi
+// @Summary  Get activity config list
+// @accept   application/json
+// @Produce  application/json
+// @Success  200  {object} response.Response{data=navResponse.PublicActivityListResponse} "Success"
+// @Router   /public/activity/list [post]
+func (a *PublicApi) GetActivityConfigList(c *gin.Context) {
+	// 获取可见的活动配置列表
+	list, err := navActivityConfigService.GetVisibleActivityConfigs(100)
+	if err != nil {
+		global.GVA_LOG.Error("获取活动列表失败!", zap.Error(err))
+		response.FailWithMessage("Failed to get activity config list", c)
+		return
+	}
+
+	// 转换为公开活动配置响应格式
+	var activityList []navResponse.PublicActivityItemResponse
+	for _, activity := range list {
+		activityList = append(activityList, navResponse.PublicActivityItemResponse{
+			ID:           activity.ID,
+			Title:        activity.Title,
+			Image:        activity.Image,
+			JumpUrl:      activity.JumpUrl,
+			CategoryName: activity.CategoryName,
+			CategoryIcon: activity.CategoryIcon,
+			Content:      activity.Content,
+		})
+	}
+
+	// 构建响应数据
+	activityResponse := navResponse.PublicActivityListResponse{
+		List:     activityList,
+		Total:    int64(len(activityList)),
+		Page:     1,
+		PageSize: len(activityList),
+	}
+
+	response.OkWithDetailed(activityResponse, "Success", c)
+}
+
+// GetActivityDetail 根据ID获取活动详情（公开接口，无需认证）
+// @Tags     PublicApi
+// @Summary  Get activity detail by ID
+// @accept   application/json
+// @Produce  application/json
+// @Param    data body object{id=uint} true "Activity ID"
+// @Success  200  {object} response.Response{data=object{id=uint,title=string,content=string}} "Success"
+// @Router   /public/activity/detail [post]
+func (a *PublicApi) GetActivityDetail(c *gin.Context) {
+	var req struct {
+		ID uint `json:"id" binding:"required"`
+	}
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage("Invalid request parameters", c)
+		return
+	}
+
+	// 获取活动配置
+	activity, err := navActivityConfigService.GetActivityConfigById(req.ID)
+	if err != nil {
+		global.GVA_LOG.Error("获取活动配置失败!", zap.Error(err))
+		response.FailWithMessage("Activity not found", c)
+		return
+	}
+
+	// 检查活动是否可见
+	if activity.Status != 1 || activity.IsVisible != 1 {
+		response.FailWithMessage("Activity not available", c)
+		return
+	}
+
+	// 构建响应数据
+	activityDetail := map[string]interface{}{
+		"id":      activity.ID,
+		"title":   activity.Title,
+		"content": activity.Content,
+	}
+
+	// 使用json.NewEncoder并关闭HTML转义
+	c.Header("Content-Type", "application/json; charset=utf-8")
+	c.Status(200)
+
+	encoder := json.NewEncoder(c.Writer)
+	encoder.SetEscapeHTML(false) // 关闭HTML转义
+
+	responseData := response.Response{
+		Code: 0,
+		Data: activityDetail,
+		Msg:  "Success",
+	}
+
+	encoder.Encode(responseData)
+}

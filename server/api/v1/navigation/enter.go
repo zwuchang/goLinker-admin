@@ -17,6 +17,7 @@ type ApiGroup struct {
 	NavScrollNoticeApi
 	NavPWAConfigApi
 	NavThemeConfigApi
+	NavActivityConfigApi
 }
 
 var (
@@ -33,4 +34,5 @@ var (
 	navScrollNoticeService    = navigation.ServiceGroupApp.NavScrollNoticeService
 	navPWAConfigService       = navigation.ServiceGroupApp.NavPWAConfigService
 	navThemeConfigService     = navigation.ServiceGroupApp.NavThemeConfigService
+	navActivityConfigService  = navigation.ServiceGroupApp.NavActivityConfigService
 )
